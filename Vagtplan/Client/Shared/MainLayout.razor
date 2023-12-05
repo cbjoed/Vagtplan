@@ -1,11 +1,17 @@
 ﻿@inherits LayoutComponentBase
-
-
 <style>
     .custom-background {
-        background-color: #DAECE7
+        background-color: #099
     }
 </style>
-<main class="custom-background">
-    @Body
-</main>
+<div class="custom-background">
+    <main>
+        <div class="navbar">
+            <NavMenu />
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
