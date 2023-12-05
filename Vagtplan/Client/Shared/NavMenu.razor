@@ -1,5 +1,17 @@
-﻿﻿<nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: lightyellow">
-    <a class="navbar-brand" style="color: #318; font-size: 50px; padding-right: 30px;" href="#">HEJ</a>
-    <a class="navbar-brand" style="color: #292; font-size: 50px; padding-right: 30px;" href="Vagtplan">Vagtplan</a>
-    <a class="navbar-brand" style="color: #990; font-size: 50px; padding-right: 30px;" href="Profil">Profil</a>
+﻿@inherits LayoutComponentBase
+
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #5E9B89 ">
+    <a class="navbar-brand" style="color: #1A1A1A; font-size: 30px; padding-right: 8px;" href="#">Login</a>
+    <a class="navbar-brand" style="color: #1A1A1A; font-size: 20px; padding-right: 8px;" href="/vagtplan">Vagtplan</a>
+    <a class="navbar-brand" style="color: #1A1A1A; font-size: 20px; padding-right: 8px;" href="/profil">Min Profil</a>
 </nav>
+<style>
+    .custom-background {
+        background-color: #5E9B89
+    }
+</style>
+<main class="custom-background">
+    @Body
+</main>
