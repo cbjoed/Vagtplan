@@ -37,7 +37,4 @@
   <ItemGroup>
     <None Remove="icon-192.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="icon-192.png" />
-  </ItemGroup>
 </Project>
