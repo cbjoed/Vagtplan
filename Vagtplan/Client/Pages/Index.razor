@@ -1,9 +1,88 @@
 ﻿@page "/"
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+@inherits LayoutComponentBase
 
-<PageTitle>Index</PageTitle>
+<style>
+    html,
+    body {
+        height: 100px;
+    }
 
-<h1>Hello, world!</h1>
+    body {
+        display: -ms-flexbox;
+        display: center;
+        -ms-flex-align: center;
+        align-items: center;
+        padding-top: 20px;
+        padding-bottom: 0px;
+        background-color: #f5f5f5;
+    }
 
-Welcome to your new app.
+    .form-signin {
+        width: 100%;
+        max-width: 330px;
+        padding: 15px;
+        margin: auto;
+    }
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+        .form-signin .checkbox {
+            font-weight: 400;
+        }
+
+        .form-signin .form-control {
+            position: relative;
+            box-sizing: border-box;
+            height: auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+            .form-signin .form-control:focus {
+                z-index: 2;
+            }
+
+        .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+</style>
+
+<main>
+    <form class="form-signin" @onsubmit="AttemptLogin">
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <input type="email" @bind="Email" class="form-control" placeholder="Email address" required autofocus>
+        <input type="password" @bind="Password" class="form-control" placeholder="Password" required>
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" @bind="RememberMe"> Remember me
+            </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+</main>
+
+@code {
+    private string Email { get; set; }
+    private string Password { get; set; }
+    private bool RememberMe { get; set; }
+
+    private async Task AttemptLogin()
+    {
+        // Your login logic here
+        // Check credentials, authenticate user, etc.
+
+        // For simplicity, let's assume a successful login after a brief delay
+        // Replace this with your actual login logic
+        await Task.Delay(1000);
+
+        // Redirect to "vagtplan" after successful login
+        NavigationManager.NavigateTo("/vagtplan");
+    }
+}

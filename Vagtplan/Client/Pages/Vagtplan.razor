@@ -1,0 +1,71 @@
+﻿@page "/vagtplan"
+
+<h3>Vagtplan</h3>
+
+@code {
+    private int year;
+    private int month;
+    private int[,] calendar;
+
+    protected override void OnInitialized()
+    {
+        year = DateTime.Now.Year; // Set default year to the current year
+        month = DateTime.Now.Month; // Set default month to the current month
+        FillCalendar();
+    }
+
+    private void FillCalendar()
+    {
+        int days = DateTime.DaysInMonth(year, month);
+        calendar = new int[6, 7];
+        int currentDay = 1;
+        var date = new DateTime(year, month, 1);
+        var dayOfWeek = (int)date.DayOfWeek;
+
+        for (int i = 0; i < calendar.GetLength(0); i++)
+        {
+            for (int j = 0; j < calendar.GetLength(1) && currentDay - dayOfWeek + 1 <= days; j++)
+            {
+                if (i == 0 && month > j)
+                {
+                    calendar[i, j] = 0;
+                }
+                else
+                {
+                    calendar[i, j] = currentDay - dayOfWeek + 1;
+                    currentDay++;
+                }
+            }
+        }
+    }
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Man</th>
+            <th>Tir</th>
+            <th>Ons</th>
+            <th>Tor</th>
+            <th>Fre</th>
+            <th>Lør</th>
+            <th>Søn</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < calendar.GetLength(0); i++)
+        {
+            <tr>
+                @for (int j = 0; j < calendar.GetLength(1); j++)
+                {
+                    <td>
+                        @if (calendar[i, j] > 0)
+                        {
+                            <text>@calendar[i, j]</text>
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
