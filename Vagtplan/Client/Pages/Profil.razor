@@ -1,0 +1,40 @@
+﻿@page "/profile"
+@inherits ComponentBase
+@inject Musikfestival.Repositories.IBruger _repository
+@using Musikfestival.Shared.Models
+
+
+<h3>User Profiles</h3>
+
+@if (Users != null)
+{
+    foreach (var user in Users)
+    {
+        <div>
+            <strong>@user.UserName</strong>
+            <!-- Display other user profile properties as needed -->
+        </div>
+    }
+}
+else
+{
+    <p>No user profiles available.</p>
+}
+
+@code {
+    private List<Bruger> Users = new List<Bruger>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Inject your IBruger repository and retrieve user profiles
+            Users = (await _repository.GetAllBruger())?.ToList();
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions, log, or display an error message
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
+    }
+}
