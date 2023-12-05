@@ -41,7 +41,7 @@
                 z-index: 2;
             }
 
-        .form-signin input[type="email"] {
+        .form-signin input[type="username"] {
             margin-bottom: -1px;
             border-bottom-right-radius: 0;
             border-bottom-left-radius: 0;
@@ -57,7 +57,7 @@
 <main>
     <form class="form-signin" @onsubmit="AttemptLogin">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <input type="email" @bind="Email" class="form-control" placeholder="Username" required autofocus>
+        <input type="username" @bind="Username" class="form-control" placeholder="Username" required autofocus>
         <input type="password" @bind="Password" class="form-control" placeholder="Password" required>
         <div class="checkbox mb-3">
             <label>
@@ -69,7 +69,7 @@
 </main>
 
 @code {
-    private string Email { get; set; }
+    private string Username { get; set; }
     private string Password { get; set; }
     private bool RememberMe { get; set; }
 
