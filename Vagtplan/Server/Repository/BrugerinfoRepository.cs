@@ -55,6 +55,7 @@ namespace Musikfestival.Repositories
             {
                 Bruger bruger = new Bruger()
                 {
+                    Id = doc.Contains("_id") ? doc["_id"].AsObjectId : ObjectId.Empty,
                     Username = doc.Contains("username") && doc["username"] != BsonNull.Value ? doc["username"].AsString : null,
                     Password = doc.Contains("password") && doc["password"] != BsonNull.Value ? doc["password"].AsString : null,
                     Type = doc.Contains("type") && doc["type"] != BsonNull.Value ? doc["type"].AsString : null,

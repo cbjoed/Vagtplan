@@ -1,27 +1,27 @@
 ﻿@page "/profil"
 @using Musikfestival.Shared.Models;
+@using MongoDB.Bson;
 @inject HttpClient Http;
 
 <PageTitle>Profilside</PageTitle>
 
 <h1>Min profil</h1>
 
-@if (profiler == null)
+@if (brugere == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-
     <table class="table">
 
         <tbody>
-            @foreach (var profil in profiler)
+            @foreach (var bruger in brugere)
             {
-                <tr class="profilRow">
+                <tr class="brugerRow">
                     <td>
-                        <h2>@profil.Navn - @profil.Email</h2>
-                        Beskrivelse : @profil.Beskrivelse
+                        <h2>@bruger.Id @bruger.Navn - @bruger.Email</h2>
+                        Beskrivelse : @bruger.Beskrivelse
                     </td>
                 </tr>
             }
@@ -34,11 +34,11 @@ else
 
 @code {
 
-    private Bruger[]? profiler;
+    private Bruger[]? brugere;
 
     protected override async Task OnInitializedAsync()
     {
-        profiler = await Http.GetFromJsonAsync<Bruger[]>("Bruger");
+        brugere = await Http.GetFromJsonAsync<Bruger[]>("Bruger");
 
     }
 }

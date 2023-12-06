@@ -5,6 +5,9 @@ namespace Musikfestival.Shared.Models
 {
     public class Bruger
     {
+        [BsonId]
+        [BsonRepresentationAttribute(BsonType.ObjectId)]
+        public ObjectId Id { get; set; }
         public string Username { get; set; } = String.Empty;
         public string Password { get; set; } = String.Empty;
         public string Type { get; set; } = String.Empty;
