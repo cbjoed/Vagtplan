@@ -5,15 +5,25 @@ namespace Musikfestival.Shared.Models
 {
     public class Bruger
     {
-        public string Username { get; set; } = String.Empty;
-        public string Password { get; set; } = String.Empty;
-        public string Type { get; set; } = String.Empty;
-        public string Navn { get; set; } = String.Empty;
-        public string Adresse { get; set; } = String.Empty;
-        public string Email { get; set; } = String.Empty;
-        public int Tlf { get; set; } = 0;
-        public string Beskrivelse { get; set; } = String.Empty;
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string _id { get; set; } = "";
+
+        public string username { get; set; } = string.Empty;
+
+        public string password { get; set; } = string.Empty;
+
+        public string type { get; set; } = string.Empty;
+
+        public string navn { get; set; } = string.Empty;
+
+        public string adresse { get; set; } = string.Empty;
+
+        public string email { get; set; } = string.Empty;
+
+        public int tlf { get; set; } = 0;
+
+        public string beskrivelse { get; set; } = string.Empty;
+
     }
 }
-
-
