@@ -15,6 +15,8 @@ namespace Musikfestival
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
 
+            //Dependency Injections
+
             builder.Services.AddSingleton<IBruger, BrugerinfoRepository>();
             builder.Services.AddSingleton<IVagter, VagtplanRepository>();
 
