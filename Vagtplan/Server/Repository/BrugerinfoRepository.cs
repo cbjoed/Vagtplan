@@ -72,5 +72,27 @@ namespace Musikfestival.Repositories
 
             return brugere.ToArray();
         }
+        public async Task<Bruger> AuthenticateUserAsync(string username, string password)
+        {
+
+            var result = await bruger.Find(
+                Builders<BsonDocument>.Filter.Eq("username", username) &
+                Builders<BsonDocument>.Filter.Eq("password", password))
+                .FirstOrDefaultAsync();
+
+            if (result != null)
+            {
+                Bruger authenticatedUser = new Bruger()
+                {
+                    Username = result.Contains("username") ? result["username"].AsString : null,
+                    Password = result.Contains("password") ? result["password"].AsString : null,
+                
+                };
+
+                return authenticatedUser;
+            }
+
+            return null; // No matching user found
+        }
     }
 }

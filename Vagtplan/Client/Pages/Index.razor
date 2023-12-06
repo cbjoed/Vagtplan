@@ -1,6 +1,10 @@
 ﻿@page "/"
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 @inherits LayoutComponentBase
+@using Musikfestival.Shared.Models;
+@inject HttpClient Http;
+
+
 
 <style>
     html,
@@ -41,7 +45,7 @@
                 z-index: 2;
             }
 
-        .form-signin input[type="username"] {
+        .form-signin input[type="text"] {
             margin-bottom: -1px;
             border-bottom-right-radius: 0;
             border-bottom-left-radius: 0;
@@ -57,32 +61,42 @@
 <main>
     <form class="form-signin" @onsubmit="AttemptLogin">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <input type="username" @bind="Username" class="form-control" placeholder="Username" required autofocus>
-        <input type="password" @bind="Password" class="form-control" placeholder="Password" required>
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" @bind="RememberMe"> Remember me
-            </label>
-        </div>
+        <input type="text" @bind="login.Username" class="form-control" placeholder="Username" required autofocus>
+        <input type="password" @bind="login.Password" class="form-control" placeholder="Password" required>
+   
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
     </form>
 </main>
 
+}
 @code {
-    private string Username { get; set; }
-    private string Password { get; set; }
-    private bool RememberMe { get; set; }
+    private Login login = new Login();
 
     private async Task AttemptLogin()
     {
-        // Your login logic here
-        // Check credentials, authenticate user, etc.
+        try
+        {
+            // Communicate with the server API
+            var response = await Http.PostAsJsonAsync<Login>("api/bruger", login);
+            response.EnsureSuccessStatusCode();
 
-        // For simplicity, let's assume a successful login after a brief delay
-        // Replace this with your actual login logic
-        await Task.Delay(1000);
+            Bruger authenticatedUser = await response.Content.ReadFromJsonAsync<Bruger>();
 
-        // Redirect to "vagtplan" after successful login
-        NavigationManager.NavigateTo("/vagtplan");
+            if (authenticatedUser != null)
+            {
+                // Redirect to "vagtplan" after successful login
+                NavigationManager.NavigateTo("/vagtplan");
+            }
+            else
+            {
+                // Handle unsuccessful login, show error message, etc.
+                Console.WriteLine("Login failed. Please check your credentials.");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log or handle any exceptions that occur during the request
+            Console.WriteLine($"Error: {ex.Message}");
+        }
     }
 }
