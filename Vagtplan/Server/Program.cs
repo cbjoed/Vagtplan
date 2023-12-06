@@ -19,6 +19,7 @@ namespace Musikfestival
 
             builder.Services.AddSingleton<IBruger, BrugerinfoRepository>();
             builder.Services.AddSingleton<IVagter, VagtplanRepository>();
+         
 
             var app = builder.Build();
 
