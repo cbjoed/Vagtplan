@@ -30,9 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\icon-192.png" />
     <Content Remove="wwwroot\favicon.png" />
     <Content Remove="wwwroot\js\bootstrap.js" />
+    <Content Remove="wwwroot\icon-192.png" />
+    <Content Remove="wwwroot\icon-512.png" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="icon-192.png" />
