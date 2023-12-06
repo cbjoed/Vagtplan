@@ -5,30 +5,26 @@ using System.Threading.Tasks;
 using Musikfestival.Repositories;
 
 [ApiController]
-[Route("api/bruger")]
+[Route("bruger")]
 public class ProfilController : ControllerBase
 {
-    private readonly IBruger _repository;
 
-    public ProfilController(IBruger repository)
+    private IBruger brugerRepo;
+
+    public ProfilController(IBruger brugerRepo)
     {
-        _repository = repository;
+        this.brugerRepo = brugerRepo;
     }
 
-    // Hent alle Bruger
+    /*[HttpPost]
+    public void Update(Bruger bruger)
+    {
+        brugerRepo.Update(bruger);
+    }*/
+
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Bruger>>> GetBruger()
+    public IEnumerable<Bruger> Get()
     {
-        try
-        {
-            IEnumerable<Bruger> bruger = await _repository.GetAllBruger();
-            return Ok(bruger);
-        }
-        catch (System.Exception ex)
-        {
-            return StatusCode(500, $"En fejl opstod ved hentning af Bruger data. Fejl: {ex.Message}");
-        }
+        return brugerRepo.GetAllBrugere();
     }
-
-
 }
