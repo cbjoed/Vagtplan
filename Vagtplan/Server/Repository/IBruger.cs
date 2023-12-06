@@ -4,12 +4,10 @@ using System.Threading.Tasks;
 
 namespace Musikfestival.Repositories
 {
-
+    
 
     public interface IBruger
     {
-        //public void Update(Bruger bruger);
-
-        public Bruger[] GetAllBrugere();
+        Task<IEnumerable<Bruger>> GetAllBruger();
     }
 }

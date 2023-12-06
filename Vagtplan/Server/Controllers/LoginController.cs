@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using Musikfestival.Repositories;
 
 [ApiController]
-[Route("api/bruger")]
-public class ProfilController : ControllerBase
+[Route("api/Login")]
+public class LoginController : ControllerBase
 {
     private readonly IBruger _repository;
 
-    public ProfilController(IBruger repository)
+    public LoginController(IBruger repository)
     {
         _repository = repository;
     }

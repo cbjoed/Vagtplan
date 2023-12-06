@@ -1,44 +1,47 @@
 ﻿@page "/profil"
-@using Musikfestival.Shared.Models;
-@inject HttpClient Http;
+<h3>Profil</h3>
 
-<PageTitle>Profilside</PageTitle>
+<h2>User Profile</h2>
+<div class="contact-box">
+    <p><strong>Navn:</strong> Torben</p>
+    <p><strong>Email:</strong>Email</p>
+    <p><strong>Mobil:</strong>1234567</p>
+    <p><strong>Adresse:</strong>Torbensvej</p>
+</div>
 
-<h1>Min profil</h1>
+<div class="picture">
+    <p><img src="https://pure.au.dk/portal/files/282511937/HIMA2789_edited.jpg"<img></p>
+</div>
 
-@if (profiler == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
+<div class="attention">
+    <p><strong>Bemærkning:</strong>Hvad end det er</p>
+</div>
 
-    <table class="table">
+<style>
+    .contact-box {
+        display: inline-block;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
 
-        <tbody>
-            @foreach (var profil in profiler)
-            {
-                <tr class="profilRow">
-                    <td>
-                        <h2>@profil.Navn - @profil.Email</h2>
-                        Beskrivelse : @profil.Beskrivelse
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    .picture img {
+        height: 100px; 
+        width: 100px;
+    }
 
-
-
-}
+    .attention {
+        display: inline-block;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+</style>
 
 @code {
 
-    private Bruger[]? profiler;
-
-    protected override async Task OnInitializedAsync()
-    {
-        profiler = await Http.GetFromJsonAsync<Bruger[]>("Bruger");
-
-    }
 }

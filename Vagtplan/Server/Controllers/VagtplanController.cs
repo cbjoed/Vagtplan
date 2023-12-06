@@ -5,24 +5,24 @@ using System.Threading.Tasks;
 using Musikfestival.Repositories;
 
 [ApiController]
-[Route("api/bruger")]
-public class ProfilController : ControllerBase
+[Route("api/Vagtplan")]
+public class VagtplanController : ControllerBase
 {
-    private readonly IBruger _repository;
+    private readonly IVagter _repository;
 
-    public ProfilController(IBruger repository)
+    public VagtplanController(IVagter repository)
     {
         _repository = repository;
     }
 
-    // Hent alle Bruger
+    // Hent alle Vagter
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Bruger>>> GetBruger()
+    public async Task<ActionResult<IEnumerable<Vagter>>> GetVagter()
     {
         try
         {
-            IEnumerable<Bruger> bruger = await _repository.GetAllBruger();
-            return Ok(bruger);
+            IEnumerable<Vagter> vagter = await _repository.GetAllVagter();
+            return Ok(vagter);
         }
         catch (System.Exception ex)
         {
