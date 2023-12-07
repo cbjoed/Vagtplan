@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Musikfestival.Repositories;
 
 [ApiController]
-[Route("bruger")]
+[Route("/api/bruger")]
 public class ProfilController : ControllerBase
 {
 

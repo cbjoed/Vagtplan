@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Musikfestival.Repositories;
 
 [ApiController]
-[Route("vagter")]
+[Route("/api/vagter")]
 public class VagtplanController : ControllerBase
 {
 
