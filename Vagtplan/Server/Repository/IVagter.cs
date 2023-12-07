@@ -8,6 +8,6 @@ namespace Musikfestival.Repositories
 
     public interface IVagter
     {
-        Task<IEnumerable<Vagter>> GetAllVagter();
+        public Vagter[] GetAllVagter();
     }
 }
