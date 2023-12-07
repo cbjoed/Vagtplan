@@ -7,21 +7,21 @@ namespace Musikfestival.Shared.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string _id { get; set; } = "";
+        public ObjectId Id { get; set; }
 
-        public string lokation { get; set; } = string.Empty;
+        public string Lokation { get; set; } = String.Empty;
 
-        public int rangering { get; set; } = 0;
+        public int Rangering { get; set; } = 0;
 
-        public string type { get; set; } = string.Empty;
+        public string Type { get; set; } = String.Empty;
 
-        public int antal { get; set; } = 0;
+        public int Antal { get; set; } = 0;
 
-        public DateTime start { get; set; } = DateTime.MinValue;
+        public DateTime Start { get; set; } = DateTime.MinValue;
 
-        public DateTime slut { get; set; } = DateTime.MinValue;
+        public DateTime Slut { get; set; } = DateTime.MinValue;
 
-        public string beskrivelse { get; set; } = string.Empty;
+        public string Beskrivelse { get; set; } = String.Empty;
 
     }
 }

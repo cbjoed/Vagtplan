@@ -1,5 +1,49 @@
-﻿<h3>Admin</h3>
+﻿
+@page "/admin"
+@using Musikfestival.Shared.Models;
+@using MongoDB.Bson;
+@inject HttpClient Http;
+
+<PageTitle>Koordinator side</PageTitle>
+
+
+
+@if (vagter == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+
+     <thead>
+        <th>Type</th>
+        <th>Dato</th>
+        <th>Tidspunkt</th>
+        Antal     
+     </thead>
+
+        <tbody>
+            @foreach (var vagt in vagter)
+            {
+                <tr class="vagtRow">
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+
+}
 
 @code {
 
+    private Vagter[]? vagter;
+
+    protected override async Task OnInitializedAsync()
+    {
+        vagter = await Http.GetFromJsonAsync<Vagter[]>("vagter");
+
+    }
 }
