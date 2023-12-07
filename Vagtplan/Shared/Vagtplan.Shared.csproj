@@ -16,6 +16,7 @@
     <SupportedPlatform Include="browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Model\Login.cs" />
     <Compile Remove="WeatherForecast.cs" />
   </ItemGroup>
 </Project>

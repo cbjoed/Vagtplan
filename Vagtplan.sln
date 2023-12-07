@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vagtplan.Server", "Vagtplan\Server\Vagtplan.Server.csproj", "{A94CB748-79DF-4944-BC21-B0505DA29975}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vagtplan.Server", "Vagtplan\Server\Vagtplan.Server.csproj", "{A94CB748-79DF-4944-BC21-B0505DA29975}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vagtplan.Client", "Vagtplan\Client\Vagtplan.Client.csproj", "{784A267A-68E9-46B3-85E2-3F03E0C12012}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vagtplan.Client", "Vagtplan\Client\Vagtplan.Client.csproj", "{784A267A-68E9-46B3-85E2-3F03E0C12012}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vagtplan.Shared", "Vagtplan\Shared\Vagtplan.Shared.csproj", "{160AA079-CB5B-442E-8264-8BAC41153421}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vagtplan.Shared", "Vagtplan\Shared\Vagtplan.Shared.csproj", "{160AA079-CB5B-442E-8264-8BAC41153421}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

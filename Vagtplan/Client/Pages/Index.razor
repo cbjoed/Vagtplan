@@ -64,23 +64,23 @@
 
 <main>
     <form class="form-signin" @onsubmit="AttemptLogin">
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <input type="username" @bind="login.Username" class="form-control" placeholder="Username" required autofocus>
-        <input type="password" @bind="login.Password" class="form-control" placeholder="Password" required>
+        <h1 class="h3 mb-3 font-weight-normal">Velkommen til El Meistro</h1>
+        <input type="username" @bind="bruger.Username" class="form-control" placeholder="Brugernavn" required autofocus>
+        <input type="password" @bind="bruger.Password" class="form-control" placeholder="Kodeord" required>
    
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Log ind</button>
     </form>
 </main>
 
 @code {
-    private Login login = new Login();
+    private Bruger bruger = new Bruger();
 
     private async Task AttemptLogin()
     {
         try
         {
             // Communicate with the server API
-            var response = await Http.PostAsJsonAsync<Login>("api/bruger", login);
+            var response = await Http.PostAsJsonAsync<Bruger>("bruger", bruger);
             response.EnsureSuccessStatusCode();
 
             Bruger authenticatedUser = await response.Content.ReadFromJsonAsync<Bruger>();

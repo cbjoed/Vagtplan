@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Musikfestival.Repositories;
 
 [ApiController]
-[Route("brugere")]
+[Route("bruger")]
 public class ProfilController : ControllerBase
 {
 
@@ -26,5 +26,19 @@ public class ProfilController : ControllerBase
     public IEnumerable<Bruger> Get()
     {
         return brugerRepo.GetAllBrugere();
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<Bruger>> AuthenticateUser(Bruger bruger)
+    {
+        try
+        {
+            Bruger authenticatedUser = await brugerRepo.AuthenticateUserAsync(bruger.Username, bruger.Password);
+            return Ok(authenticatedUser);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error: {ex.Message}");
+        }
     }
 }
