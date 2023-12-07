@@ -80,7 +80,7 @@
         try
         {
             // Communicate with the server API
-            var response = await Http.PostAsJsonAsync<Bruger>("bruger", bruger);
+            var response = await Http.PostAsJsonAsync<Bruger>("/api/bruger", bruger);
             response.EnsureSuccessStatusCode();
 
             Bruger authenticatedUser = await response.Content.ReadFromJsonAsync<Bruger>();
