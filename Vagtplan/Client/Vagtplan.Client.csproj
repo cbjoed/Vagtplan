@@ -39,4 +39,7 @@
   <ItemGroup>
     <None Remove="icon-192.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\Billeder\" />
+  </ItemGroup>
 </Project>
