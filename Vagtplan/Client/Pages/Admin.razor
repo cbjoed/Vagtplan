@@ -1,5 +1,69 @@
-﻿<h3>Admin</h3>
+﻿@page "/Koordinator"
+@using Musikfestival.Shared.Models;
+@using MongoDB.Bson;
+@inject HttpClient Http;
+
+<PageTitle>Koordinatorside</PageTitle>
+
+@if (vagterne == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Lokation</th>
+                <th>Rangering</th>
+                <th>Opgave</th>
+                <th>Antal</th>
+                <th>Start</th>
+                <th>Slut</th>
+                <th>Beskrivlse</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vagter in vagterne)
+            {
+                <tr>
+                    <td>
+                        <h2>@vagter.Lokation</h2>
+                    </td>
+                    <td>
+                        <h2>@vagter.Rangering</h2>
+                    </td>
+                    <td>
+                        <h2>@vagter.Type</h2>
+                    </td>
+                    <td>
+                        <h2>@vagter.Antal</h2>
+                    </td>
+                    <td>
+                        <h2>@vagter.Start</h2>
+                    </td>
+                    <td>
+                        <h2>@vagter.Slut</h2>
+                    </td>
+                    <td>
+                        <h2>@vagter.Beskrivelse</h2>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+
+}
 
 @code {
 
+    private Vagter[]? vagterne;
+
+    protected override async Task OnInitializedAsync()
+    {
+        vagterne = await Http.GetFromJsonAsync<Vagter[]>("/api/vagter");
+
+    }
 }
