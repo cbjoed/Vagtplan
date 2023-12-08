@@ -14,19 +14,23 @@ else
     <table class="table">
         <thead>
             <tr>
+                <th>Dato</th>
                 <th>Lokation</th>
                 <th>Rangering</th>
                 <th>Opgave</th>
                 <th>Antal</th>
+                <th>Beskrivlse</th>
                 <th>Start</th>
                 <th>Slut</th>
-                <th>Beskrivlse</th>
             </tr>
-        </thead>
+            </thead>
         <tbody>
             @foreach (var vagter in vagterne)
             {
                 <tr>
+                    <td>
+                        <h2>@vagter.Dato</h2>
+                    </td>
                     <td>
                         <h2>@vagter.Lokation</h2>
                     </td>
@@ -40,13 +44,13 @@ else
                         <h2>@vagter.Antal</h2>
                     </td>
                     <td>
+                        <h2>@vagter.Beskrivelse</h2>
+                    </td>
+                    <td>
                         <h2>@vagter.Start</h2>
                     </td>
                     <td>
                         <h2>@vagter.Slut</h2>
-                    </td>
-                    <td>
-                        <h2>@vagter.Beskrivelse</h2>
                     </td>
                 </tr>
             }
