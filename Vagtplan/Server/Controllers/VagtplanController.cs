@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Musikfestival.Repositories;
 
 [ApiController]
-[Route("/api/vagter")]
 public class VagtplanController : ControllerBase
 {
 
@@ -17,8 +16,16 @@ public class VagtplanController : ControllerBase
     }
 
     [HttpGet]
+    [Route("/api/vagter")]
     public IEnumerable<Vagter> Get()
     {
         return vagtRepo.GetAllVagter();
+    }
+
+    [HttpPost]
+    [Route("fordeling")]
+    public void AddTilFordeling(Vagter vagter)
+    {
+        vagtRepo.AddTilFordeling(vagter);
     }
 }

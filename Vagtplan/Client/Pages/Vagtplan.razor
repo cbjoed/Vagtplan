@@ -1,9 +1,9 @@
 ﻿@page "/Vagtplan"
-@using Musikfestival.Shared.Models;
-@using MongoDB.Bson;
+@using Musikfestival.Shared.Models
+@using MongoDB.Bson
 @inject HttpClient Http;
 
-<PageTitle>Koordinatorside</PageTitle>
+<PageTitle>Vagtplan</PageTitle>
 
 @if (vagterne == null)
 {
@@ -11,48 +11,82 @@
 }
 else
 {
+    @if (vagterne.Any()) // Vis kun tabellen, hvis der er nogen vagter tilbage
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <!-- Header cells for den øverste liste -->
+                    <th>Dato</th>
+                    <th>Lokation</th>
+                    <th>Rangering</th>
+                    <th>Opgave</th>
+                    <th>Antal</th>
+                    <th>Beskrivlse</th>
+                    <th>Start</th>
+                    <th>Slut</th>
+                    <th>Tilføj vagt</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vagter in vagterne)
+                {
+                    <tr>
+                        <td>@vagter.Dato</td>
+                        <td>@vagter.Lokation</td>
+                        <td>@vagter.Rangering</td>
+                        <td>@vagter.Type</td>
+                        <td>@vagter.Antal</td>
+                        <td>@vagter.Beskrivelse</td>
+                        <td>@vagter.Start</td>
+                        <td>@vagter.Slut</td>
+                        <td>
+                            <button @onclick="() => TilfojVagt(vagter)">Tilføj vagt</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <h3>Du har valgt:</h3>
     <table class="table">
         <thead>
-            <tr>
-                <th>Dato</th>
-                <th>Lokation</th>
-                <th>Rangering</th>
-                <th>Opgave</th>
-                <th>Antal</th>
-                <th>Beskrivlse</th>
-                <th>Start</th>
-                <th>Slut</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var vagter in vagterne)
+            @if (valgte.Any()) // Vis kun header cells, hvis der er valgte vagter
             {
                 <tr>
+                    <!-- Header cells for "Du har valgt" listen -->
+                    <th>Dato</th>
+                    <th>Lokation</th>
+                    <th>Rangering</th>
+                    <th>Opgave</th>
+                    <th>Antal</th>
+                    <th>Beskrivlse</th>
+                    <th>Start</th>
+                    <th>Slut</th>
+                    <th>Fjern vagt</th>
+                </tr>
+            }
+        </thead>
+        <tbody>
+            @foreach (var valgtVagt in valgte)
+            {
+                <tr>
+                    <td>@valgtVagt.Dato</td>
+                    <td>@valgtVagt.Lokation</td>
+                    <td>@valgtVagt.Rangering</td>
+                    <td>@valgtVagt.Type</td>
+                    <td>@valgtVagt.Antal</td>
+                    <td>@valgtVagt.Beskrivelse</td>
+                    <td>@valgtVagt.Start</td>
+                    <td>@valgtVagt.Slut</td>
                     <td>
-                        <h2>@vagter.Dato</h2>
+                        <img src="Billeder/Update.png" alt="Button Image" class="UpdateButton" style="width: 38px; height: 45px;" @onclick="HandleValidSubmit" />
+
+                        <img src="Billeder/Delete.png" alt="Button Image" class="DeleteButton" style="width: 38px; height: 45px;" @onclick="() => FjernVagt(valgtVagt)" />
+
+
                     </td>
-                    <td>
-                        <h2>@vagter.Lokation</h2>
-                    </td>
-                    <td>
-                        <h2>@vagter.Rangering</h2>
-                    </td>
-                    <td>
-                        <h2>@vagter.Type</h2>
-                    </td>
-                    <td>
-                        <h2>@vagter.Antal</h2>
-                    </td>
-                    <td>
-                        <h2>@vagter.Beskrivelse</h2>
-                    </td>
-                    <td>
-                        <h2>@vagter.Start</h2>
-                    </td>
-                    <td>
-                        <h2>@vagter.Slut</h2>
-                    </td>
-                    <button>Tag Vagt</button>
                 </tr>
             }
         </tbody>
@@ -60,12 +94,44 @@ else
 }
 
 @code {
-
     private Vagter[]? vagterne;
+    private List<Vagter> valgte = new List<Vagter>();
+
+    Vagter vagter = new();
+
+    private EditContext aEditContext;
 
     protected override async Task OnInitializedAsync()
     {
+        aEditContext = new EditContext(vagter);
         vagterne = await Http.GetFromJsonAsync<Vagter[]>("/api/vagter");
+    }
 
+    private void TilfojVagt(Vagter valgtVagt)
+    {
+        // Tilføj den valgte vagt til "Du har valgt" listen
+        valgte.Add(valgtVagt);
+
+        // Fjern den valgte vagt fra den øverste liste
+        vagterne = vagterne.Where(v => v != valgtVagt).ToArray();
+    }
+
+    private void FjernVagt(Vagter valgtVagt)
+    {
+        // Fjern vagten fra "Du har valgt" listen
+        valgte.Remove(valgtVagt);
+
+        // Tilføj vagten tilbage til den øverste liste
+        vagterne = vagterne.Append(valgtVagt).ToArray();
+    }
+
+    Vagter valgt = new();
+
+    public async Task HandleValidSubmit()
+    {
+        foreach (var valgtVagt in valgte)
+        {
+            await Http.PostAsJsonAsync<Vagter>("fordeling", valgtVagt);
+        }
     }
 }

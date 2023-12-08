@@ -14,12 +14,30 @@ namespace Musikfestival.Repositories
         MongoClient dbClient;
         IMongoDatabase database;
         IMongoCollection<BsonDocument> vagter;
+        IMongoCollection<BsonDocument> fordeling;
 
         public VagtplanRepository()
         {
             dbClient = new MongoClient(connectionString);
             database = dbClient.GetDatabase("VagterDB");
             vagter = database.GetCollection<BsonDocument>("vagter");
+            fordeling = database.GetCollection<BsonDocument>("fordeling");
+        }
+
+        public void AddTilFordeling(Vagter vagter)
+        {
+            BsonDocument vagterDocument = new BsonDocument
+            {
+                { "Dato", vagter.Dato },
+                { "Lokation", vagter.Lokation },
+                { "Rangering", vagter.Rangering },
+                { "Type", vagter.Type },
+                { "Antal", vagter.Antal },
+                { "Start", vagter.Start },
+                { "Slut", vagter.Slut },
+            };
+
+            fordeling.InsertOne(vagterDocument);
         }
 
         public Vagter[] GetAllVagter()
