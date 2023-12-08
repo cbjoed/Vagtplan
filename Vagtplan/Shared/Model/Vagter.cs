@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace Musikfestival.Shared.Models
 {
@@ -18,6 +19,8 @@ namespace Musikfestival.Shared.Models
         public string Slut { get; set; } = String.Empty;
         public string Username { get; set; } = String.Empty;
         public string Beskrivelse { get; set; } = String.Empty;
+
+        [JsonIgnore] public bool IsEditing { get; set;}
     }
 }
 
