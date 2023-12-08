@@ -4,8 +4,6 @@
 @using Musikfestival.Shared.Models;
 @inject HttpClient Http;
 
-
-
 <style>
     html,
     body {
@@ -17,7 +15,7 @@
         display: center;
         -ms-flex-align: center;
         align-items: center;
-        padding-top: 20px;
+        padding-top: 0px;
         padding-bottom: 0px;
         background-color: #7BBF9F;
     }
@@ -63,8 +61,8 @@
 </style>
 
 <main>
+    <img src="Billeder/logo.png" style="width: 400px; height:200px;" />
     <form class="form-signin" @onsubmit="AttemptLogin">
-        <h1 class="h3 mb-3 font-weight-normal">Velkommen til El Meistro</h1>
         <input type="username" @bind="bruger.Username" class="form-control" placeholder="Brugernavn" required autofocus>
         <input type="password" @bind="bruger.Password" class="form-control" placeholder="Kodeord" required>
    
