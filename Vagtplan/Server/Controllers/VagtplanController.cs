@@ -24,8 +24,8 @@ public class VagtplanController : ControllerBase
 
     [HttpPost]
     [Route("fordeling")]
-    public void AddTilFordeling(Vagter vagter)
+    public void AddVagt(Vagter vagter)
     {
-        vagtRepo.AddTilFordeling(vagter);
+        vagtRepo.AddVagt(vagter);
     }
 }

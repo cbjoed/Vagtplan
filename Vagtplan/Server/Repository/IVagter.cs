@@ -10,6 +10,6 @@ namespace Musikfestival.Repositories
     {
         public Vagter[] GetAllVagter();
 
-        void AddTilFordeling(Vagter vagter);
+        void AddVagt(Vagter vagter);
     }
 }

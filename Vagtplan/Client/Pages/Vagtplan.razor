@@ -44,7 +44,7 @@ else
                         <td>@vagter.Start</td>
                         <td>@vagter.Slut</td>
                         <td>
-                            <button @onclick="() => TilfojVagt(vagter)">Tag vagt</button>
+                            <button @onclick="() => ListVagt(vagter)">Tag vagt</button>
                         </td>
                     </tr>
                 }
@@ -84,7 +84,7 @@ else
                     <td>@valgtVagt.Start</td>
                     <td>@valgtVagt.Slut</td>
                     <td>
-                    <img src="Billeder/Delete.png" alt="Button Image" class="DeleteButton" style="width: 28px; height: 35px;" @onclick="() => FjernVagt(valgtVagt)"/>
+                    <img src="Billeder/Delete.png" alt="Button Image" class="DeleteButton" style="width: 28px; height: 35px;" @onclick="() => FjernListedVagt(valgtVagt)"/>
                     </td>
                 </tr>
             }
@@ -111,7 +111,7 @@ else
         vagterne = await Http.GetFromJsonAsync<Vagter[]>("/api/vagter");
     }
 
-    private void TilfojVagt(Vagter valgtVagt)
+    private void ListVagt(Vagter valgtVagt)
     {
         // Tilføj den valgte vagt til "Du har valgt" listen
         valgte.Add(valgtVagt);
@@ -120,7 +120,7 @@ else
         vagterne = vagterne.Where(v => v != valgtVagt).ToArray();
     }
 
-    private void FjernVagt(Vagter valgtVagt)
+    private void FjernListedVagt(Vagter valgtVagt)
     {
         // Fjern vagten fra "Du har valgt" listen
         valgte.Remove(valgtVagt);

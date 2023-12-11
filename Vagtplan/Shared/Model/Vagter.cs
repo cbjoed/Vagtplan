@@ -9,7 +9,7 @@ namespace Musikfestival.Shared.Models
     {
         [BsonId]
         [BsonRepresentationAttribute(BsonType.ObjectId)]
-        public ObjectId Id { get; set; }
+        public int VagtId { get; set; }
         public string Dato { get; set; } = String.Empty;
         public string Lokation { get; set; } = String.Empty;
         public int Rangering { get; set; } = 0;

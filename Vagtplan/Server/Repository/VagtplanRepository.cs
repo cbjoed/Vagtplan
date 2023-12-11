@@ -24,18 +24,12 @@ namespace Musikfestival.Repositories
             fordeling = database.GetCollection<BsonDocument>("fordeling");
         }
 
-        public void AddTilFordeling(Vagter vagter)
+        public void AddVagt(Vagter vagter)
         {
             BsonDocument vagterDocument = new BsonDocument
             {
-                { "Dato", vagter.Dato },
-                { "Lokation", vagter.Lokation },
-                { "Rangering", vagter.Rangering },
-                { "Type", vagter.Type },
-                { "Antal", vagter.Antal },
-                { "Start", vagter.Start },
-                { "Slut", vagter.Slut },
-                { "Username", vagter.Username },
+                { "vagtId", vagter.VagtId },
+                { "username", vagter.Username },
             };
 
             fordeling.InsertOne(vagterDocument);
@@ -51,7 +45,7 @@ namespace Musikfestival.Repositories
             {
                 Vagter vagter = new Vagter()
                 {
-                    Id = doc.Contains("_id") ? doc["_id"].AsObjectId : ObjectId.Empty,
+                    VagtId = doc.Contains("vagtId") ? doc["vagtId"].AsInt32 : 0,
                     Dato = doc.Contains("dato") && doc["dato"] != BsonNull.Value ? doc["dato"].AsString : null,
                     Lokation = doc.Contains("lokation") && doc["lokation"] != BsonNull.Value ? doc["lokation"].AsString : null,
                     Rangering = doc.Contains("rangering") && doc["rangering"] != BsonNull.Value ? doc["rangering"].AsInt32 : 0,
