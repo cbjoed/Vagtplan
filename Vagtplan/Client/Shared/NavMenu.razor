@@ -1,6 +1,15 @@
-﻿@inherits LayoutComponentBase
+﻿@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+@inherits LayoutComponentBase
+@using Musikfestival.Shared.Models;
+@inject HttpClient Http;
+@inject Blazored.LocalStorage.ILocalStorageService localStore
 
 <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #4C7E6E">
-    <a class="navbar-brand" style="color: #1A1A1A; font-size: 20px; padding-left: 3px; padding-right: 5px;" href="/vagtplan">Vagtplan</a>
-    <a class="navbar-brand" style="color: #1A1A1A; font-size: 20px; padding-right: 5px;" href="/profil">Min Profil</a>
+    <a class="navbar-brand" style="color: #FFFFFF; font-size: 20px; padding-left: 25px; padding-right: 5px;" href="/vagtplan">Vagtplan</a>
+    <a class="navbar-brand" style="color: #FFFFFF; font-size: 20px; padding-right: 5px;" href="/koordinator">Koordinator</a>
+    <a class="navbar-brand" style="color: #FFFFFF; font-size: 20px; padding-right: 5px;" href="/profil">Min Profil</a>
 </nav>
+
+@code{
+
+}
