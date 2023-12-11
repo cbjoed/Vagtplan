@@ -9,7 +9,5 @@ namespace Musikfestival.Repositories
     public interface IVagter
     {
         public Vagter[] GetAllVagter();
-
-        void AddVagt(Vagter vagter);
     }
 }

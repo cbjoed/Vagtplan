@@ -14,25 +14,12 @@ namespace Musikfestival.Repositories
         MongoClient dbClient;
         IMongoDatabase database;
         IMongoCollection<BsonDocument> vagter;
-        IMongoCollection<BsonDocument> fordeling;
 
         public VagtplanRepository()
         {
             dbClient = new MongoClient(connectionString);
             database = dbClient.GetDatabase("VagterDB");
             vagter = database.GetCollection<BsonDocument>("vagter");
-            fordeling = database.GetCollection<BsonDocument>("fordeling");
-        }
-
-        public void AddVagt(Vagter vagter)
-        {
-            BsonDocument vagterDocument = new BsonDocument
-            {
-                { "vagtId", vagter.VagtId },
-                { "username", vagter.Username },
-            };
-
-            fordeling.InsertOne(vagterDocument);
         }
 
         public void UpdatePlan(Vagter vagter)
@@ -61,15 +48,15 @@ namespace Musikfestival.Repositories
             {
                 Vagter vagter = new Vagter()
                 {
-                    VagtId = doc.Contains("vagtId") ? doc["vagtId"].AsInt32 : 0,
-                    Dato = doc.Contains("dato") && doc["dato"] != BsonNull.Value ? doc["dato"].AsString : null,
+                    Id = doc.Contains("_id") ? doc["_id"].AsObjectId : ObjectId.Empty,
                     Lokation = doc.Contains("lokation") && doc["lokation"] != BsonNull.Value ? doc["lokation"].AsString : null,
                     Rangering = doc.Contains("rangering") && doc["rangering"] != BsonNull.Value ? doc["rangering"].AsInt32 : 0,
                     Type = doc.Contains("type") && doc["type"] != BsonNull.Value ? doc["type"].AsString : null,
                     Antal = doc.Contains("antal") && doc["antal"] != BsonNull.Value ? doc["antal"].AsInt32 : 0,
-                    Start = doc.Contains("start") && doc["start"] != BsonNull.Value ? doc["start"].AsString : null,
-                    Slut = doc.Contains("slut") && doc["slut"] != BsonNull.Value ? doc["slut"].AsString : null,
+                    Start = doc.Contains("start") && doc["start"] != BsonNull.Value ? doc["start"].AsDateTime : DateTime.MinValue,
+                    Slut = doc.Contains("slut") && doc["slut"] != BsonNull.Value ? doc["slut"].AsDateTime : DateTime.MinValue,
                     Beskrivelse = doc.Contains("beskrivelse") && doc["beskrivelse"] != BsonNull.Value ? doc["beskrivelse"].AsString : null,
+
                 };
                 vagtere.Add(vagter);
 

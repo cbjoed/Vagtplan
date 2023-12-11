@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Vagtplan.Client;
-using Blazored.LocalStorage;
-using Blazored.Modal;
 
 namespace Vagtplan.Client
 {
@@ -15,8 +13,6 @@ namespace Vagtplan.Client
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddBlazoredLocalStorage();
-            builder.Services.AddBlazoredModal();
 
             await builder.Build().RunAsync();
         }

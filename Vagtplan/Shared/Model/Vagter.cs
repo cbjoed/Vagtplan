@@ -1,7 +1,5 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System.ComponentModel;
-using System.Text.Json.Serialization;
 
 namespace Musikfestival.Shared.Models
 {
@@ -9,18 +7,14 @@ namespace Musikfestival.Shared.Models
     {
         [BsonId]
         [BsonRepresentationAttribute(BsonType.ObjectId)]
-        public int VagtId { get; set; }
-        public string Dato { get; set; } = String.Empty;
+        public ObjectId Id { get; set; }
         public string Lokation { get; set; } = String.Empty;
         public int Rangering { get; set; } = 0;
         public string Type { get; set; } = String.Empty;
         public int Antal { get; set; } = 0;
-        public string Start { get; set; } = String.Empty;
-        public string Slut { get; set; } = String.Empty;
-        public string Username { get; set; } = String.Empty;
+        public DateTime Start { get; set; } = DateTime.Now;
+        public DateTime Slut { get; set; } = DateTime.Now;
         public string Beskrivelse { get; set; } = String.Empty;
-
-        [JsonIgnore] public bool IsEditing { get; set;}
     }
 }
 
