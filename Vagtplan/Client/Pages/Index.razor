@@ -3,8 +3,7 @@
 @inherits LayoutComponentBase
 @using Musikfestival.Shared.Models;
 @inject HttpClient Http;
-
-
+@inject Blazored.LocalStorage.ILocalStorageService localStore
 
 <style>
     html,
@@ -17,9 +16,9 @@
         display: center;
         -ms-flex-align: center;
         align-items: center;
-        padding-top: 20px;
+        padding-top: 0px;
         padding-bottom: 0px;
-        background-color: #7BBF9F;
+        background-color: #66BCE8;
     }
 
     .form-signin {
@@ -64,11 +63,11 @@
 
 <main>
     <form class="form-signin" @onsubmit="AttemptLogin">
-        <h1 class="h3 mb-3 font-weight-normal">Velkommen til El Meistro</h1>
-        <input type="username" @bind="bruger.Username" class="form-control" placeholder="Brugernavn" required autofocus>
+        <center><img src="Billeder/logo1.png" width="200"><br /><br />
+        <input type="text" @bind="bruger.Username" class="form-control" placeholder="Brugernavn" required autofocus>
         <input type="password" @bind="bruger.Password" class="form-control" placeholder="Kodeord" required>
    
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Log ind</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Log ind</button></center>
     </form>
 </main>
 
@@ -80,15 +79,23 @@
         try
         {
             // Communicate with the server API
-            var response = await Http.PostAsJsonAsync<Bruger>("bruger", bruger);
+            var response = await Http.PostAsJsonAsync<Bruger>("/api/bruger", bruger);
             response.EnsureSuccessStatusCode();
 
             Bruger authenticatedUser = await response.Content.ReadFromJsonAsync<Bruger>();
 
             if (authenticatedUser != null)
             {
-                // Redirect to "vagtplan" after successful login
-                NavigationManager.NavigateTo("/vagtplan");
+                await localStore.SetItemAsync("username", authenticatedUser.Username);
+                await localStore.SetItemAsync("type", authenticatedUser.Type);
+                if (authenticatedUser.Type == "Koordinator")
+                {
+                    NavigationManager.NavigateTo("/koordinator");
+                }
+                else
+                {
+                    NavigationManager.NavigateTo("/vagtplan");
+                }
             }
             else
             {
