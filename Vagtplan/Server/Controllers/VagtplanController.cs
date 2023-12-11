@@ -22,6 +22,13 @@ public class VagtplanController : ControllerBase
         return vagtRepo.GetAllVagter();
     }
 
+    [HttpPut]
+    [Route("/api/vagter")]
+    public void UpdatePlan(Vagter vagter)
+    {
+        vagtRepo.UpdatePlan(vagter);
+    }
+
     [HttpPost]
     [Route("fordeling")]
     public void AddVagt(Vagter vagter)

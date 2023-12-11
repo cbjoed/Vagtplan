@@ -35,6 +35,22 @@ namespace Musikfestival.Repositories
             fordeling.InsertOne(vagterDocument);
         }
 
+        public void UpdatePlan(Vagter vagter)
+        {
+            BsonDocument vagterDocument = new BsonDocument
+            {
+                { "dato", vagter.Dato },
+                { "lokation", vagter.Lokation },
+                { "rangering", vagter.Rangering },
+                { "type", vagter.Type },
+                { "antal", vagter.Antal },
+                { "start", vagter.Start },
+                { "slut", vagter.Slut },
+                { "beskrivelse", vagter.Beskrivelse },
+                { "vagtId", vagter.VagtId },
+            };
+        }
+
         public Vagter[] GetAllVagter()
         {
             var result = vagter.Find(new BsonDocument()).ToList();
