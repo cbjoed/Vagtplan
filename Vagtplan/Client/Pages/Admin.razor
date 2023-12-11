@@ -1,162 +1,49 @@
-﻿@page "/Koordinator"
-@using Musikfestival.Shared.Models
-@using MongoDB.Bson
-@inject HttpClient Http
-@inject Blazored.LocalStorage.ILocalStorageService localStore
-<!--
-<table>
-    <thead>
-        <tr>
-            <th>Dato</th>
-            <th>Lokation</th>
-            <th>Rangering</th>
-            <th>Type</th>
-            <th>Antal</th>
-            <th>Beskrivlse</th>
-            <th>Start</th>
-            <th>Slut</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var vagter in fizze)
-        {
-            <tr>
-                @if (vagter.IsEditing)
-                {
-                    <td>
-                        <input type="text" class="form-control" placeholder="01/01" @bind="@vagter.Dato" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" placeholder="Område A" @bind="@vagter.Lokation" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" placeholder="1-3" @bind="@vagter.Rangering" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" placeholder="Skrald" @bind="@vagter.Type" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" placeholder="100" @bind="@vagter.Antal" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" placeholder="..." @bind="@vagter.Beskrivelse" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" placeholder="00:00" @bind="@vagter.Start" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" placeholder="00:00" @bind="@vagter.Slut" />
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-link" @onclick="() => EnableEditing(false, vagter)">
-                            <i class="fas fa-window-close"></i>
-                        </button>
-                        <button type="button" class="btn btn-link" @onclick="() => UpdateVagtplan(vagter)">
-                            <i class="fas fa-check-square"></i>
-                        </button>
-                    </td>
-                }
-                else
-                {
-                    <td>@vagter.Dato</td>
-                    <td>@vagter.Lokation</td>
-                    <td>@vagter.Rangering</td>
-                    <td>@vagter.Type</td>
-                    <td>@vagter.Antal</td>
-                    <td>@vagter.Beskrivelse</td>
-                    <td>@vagter.Start</td>
-                    <td>@vagter.Slut</td>
-                    <td>
-                        <button type="button" class="btn btn-link" @onclick="() => EnableEditing(true, vagter)">
-                            <i class="fas fa-pen"></i>
-                        </button>
-                    </td>
-                }
-            </tr>
-        }
-    </tbody>
-</table>
-            <th>Antal</th>
-            <th>Beskrivlse</th>
+﻿
+@page "/admin"
+@using Musikfestival.Shared.Models;
+@using MongoDB.Bson;
+@inject HttpClient Http;
 
-    private void EnableEditing(bool flag, Vagter vagter)
-    {
-        vagter.IsEditing = flag;
-    }
-    </thead>
-    <tbody>
-        @foreach (var vagter in f)
-        {
-            <tr>
-                @if (vagter.IsEditing)
-                {
-                    <td>
+<PageTitle>Koordinator side</PageTitle>
 
--->
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" placeholder="Område A" @bind="@vagter.Lokation" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" placeholder="1-3" @bind="@vagter.Rangering" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" placeholder="Skrald" @bind="@vagter.Type" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" placeholder="100" @bind="@vagter.Antal" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" placeholder="..." @bind="@vagter.Beskrivelse" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" placeholder="00:00" @bind="@vagter.Start" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" placeholder="00:00" @bind="@vagter.Slut" />
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-link" @onclick="() => EnableEditing(false, vagter)">
-                            <i class="fas fa-window-close"></i>
-                        </button>
-                        <button type="button" class="btn btn-link" @onclick="() => UpdateVagtplan(vagter)">
-                            <i class="fas fa-check-square"></i>
-                        </button>
-                    </td>
-                }
-                else
-                {
-                    <td>@vagter.Dato</td>
-                    <td>@vagter.Lokation</td>
-                    <td>@vagter.Rangering</td>
-                    <td>@vagter.Type</td>
-                    <td>@vagter.Antal</td>
-                    <td>@vagter.Beskrivelse</td>
-                    <td>@vagter.Start</td>
-                    <td>@vagter.Slut</td>
-                    <td>
-                        <button type="button" class="btn btn-link" @onclick="() => EnableEditing(true, vagter)">
-                            <i class="fas fa-pen"></i>
-                        </button>
-                    </td>
-                }
-            </tr>
-        }
-    </tbody>
-</table>
+
+
+@if (vagter == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+
+     <thead>
+        <th>Type</th>
+        <th>Dato</th>
+        <th>Tidspunkt</th>
+        Antal     
+     </thead>
+
+        <tbody>
+            @foreach (var vagt in vagter)
+            {
+                <tr class="vagtRow">
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+
+}
 
 @code {
-    private void EnableEditing(bool flag, Vagter vagter)
-    {
-        vagter.IsEditing = flag;
-    }
+
+    private Vagter[]? vagter;
 
     protected override async Task OnInitializedAsync()
     {
         vagter = await Http.GetFromJsonAsync<Vagter[]>("vagter");
 
     }
-
 }
--->
