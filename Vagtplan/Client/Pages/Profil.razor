@@ -4,21 +4,42 @@
 @inject IJSRuntime JSRuntime
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 
-
-
 <PageTitle>Profilside</PageTitle>
 
-@* Vi kalder username igennem localstorage og viser derved i en string, vedkommendes navn. *@
 @code {
     private string storedUsername;
     private Bruger[]? brugere;
     private Bruger matchingUser;
+    private bool isEditing = false; // Flag for at indikere, om redigering er aktiv
 
     protected override async Task OnInitializedAsync()
     {
         storedUsername = await localStore.GetItemAsync<string>("username");
         brugere = await Http.GetFromJsonAsync<Bruger[]>("/api/bruger");
         matchingUser = brugere.FirstOrDefault(user => user.Username == storedUsername);
+    }
+
+    private void StartEditing()
+    {
+        isEditing = true;
+
+    }
+
+    private async Task SaveChanges()
+    {
+        var response = await Http.PutAsJsonAsync("/api/bruger", matchingUser);
+        // Gem ændringer, f.eks. ved at sende dem til serveren
+
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Changes saved successfully.");
+            isEditing = false;
+        }
+        else
+        {
+            Console.WriteLine("Failed to save changes.");
+            // Handle the failure, e.g., show an error message
+        }
     }
 }
 
@@ -36,14 +57,25 @@
     @if (matchingUser != null)
     {
         <br />
-    <div class="container-box">
-        <h3>Kontaktoplysninger</h3>
-        <p><b>Navn:</b> @matchingUser.Navn</p>
-        <p><b>Email:</b> @matchingUser.Email</p>
-        <p><b>Kontaktnummer:</b> @matchingUser.Tlf</p>
+        <div class="container-box">
+            <h3>Kontaktoplysninger</h3>
+            @if (isEditing)
+            {
+                <p><b>Navn:</b> <input @bind="matchingUser.Navn" /></p>
+                <p><b>Email:</b> <input @bind="matchingUser.Email" /></p>
+                <p><b>Kontaktnummer:</b> <input @bind="matchingUser.Tlf" /></p>
+                <p><b>Adresse:</b> <input @bind="matchingUser.Adresse" /></p>
+            }
+            else
+            {
+                <p><b>Navn:</b> @matchingUser.Navn</p>
+                <p><b>Email:</b> @matchingUser.Email</p>
+                <p><b>Kontaktnummer:</b> @matchingUser.Tlf</p>
+                <p><b>Adresse:</b> @matchingUser.Adresse</p>
+            }
         </div>
     }
-        </body>
+</body>
 
 <body>
     @if (matchingUser != null)
@@ -51,10 +83,25 @@
         <br />
         <div class="container-box">
             <h3>Biografi</h3>
-            <p>@matchingUser.Navn er @matchingUser.Type</p>
-            <p>@matchingUser.Beskrivelse</p>
+            @if (isEditing)
+            {
+                <p><b>Type:</b> @matchingUser.Type</p>
+                <p><b>Beskrivelse:</b> <input @bind="matchingUser.Beskrivelse" /></p>
+            }
+            else
+            {
+                <p><b>Type:</b> @matchingUser.Type</p>
+                <p><b>Beskrivelse:</b> @matchingUser.Beskrivelse</p>
+            }
         </div>
     }
     <br />
-    <button>Rediger</button>
+    @if (isEditing)
+    {
+        <button @onclick="SaveChanges">Gem ændringer</button>
+    }
+    else
+    {
+        <button @onclick="StartEditing">Rediger</button>
+    }
 </body>

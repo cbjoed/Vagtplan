@@ -16,11 +16,11 @@ public class ProfilController : ControllerBase
         this.brugerRepo = brugerRepo;
     }
 
-    /*[HttpPost]
+    [HttpPut]
     public void Update(Bruger bruger)
     {
         brugerRepo.Update(bruger);
-    }*/
+    }
 
     [HttpGet]
     public IEnumerable<Bruger> Get()
