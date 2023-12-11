@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.ResponseCompression;
 using Musikfestival.Repositories;
 using Musikfestival.Shared.Models;
+using Blazored.LocalStorage;
+using Blazored.Modal;
 
 namespace Musikfestival
 {
@@ -19,7 +21,9 @@ namespace Musikfestival
 
             builder.Services.AddSingleton<IBruger, BrugerinfoRepository>();
             builder.Services.AddSingleton<IVagter, VagtplanRepository>();
-         
+            builder.Services.AddBlazoredLocalStorage();
+            builder.Services.AddBlazoredModal();
+
 
             var app = builder.Build();
 

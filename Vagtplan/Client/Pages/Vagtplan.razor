@@ -1,7 +1,9 @@
 ﻿@page "/Vagtplan"
 @using Musikfestival.Shared.Models
 @using MongoDB.Bson
+@using MongoDB.Driver
 @inject HttpClient Http;
+@inject Blazored.LocalStorage.ILocalStorageService localStore
 
 <PageTitle>Vagtplan</PageTitle>
 
@@ -13,13 +15,14 @@ else
 {
     @if (vagterne.Any()) // Vis kun tabellen, hvis der er nogen vagter tilbage
     {
+        <br /><h3>Tilgængelige vagter</h3>
         <table class="table">
             <thead>
                 <tr>
                     <!-- Header cells for den øverste liste -->
                     <th>Dato</th>
                     <th>Lokation</th>
-                    <th>Rangering</th>
+                    <th>Prioritet</th>
                     <th>Opgave</th>
                     <th>Antal</th>
                     <th>Beskrivlse</th>
@@ -41,7 +44,7 @@ else
                         <td>@vagter.Start</td>
                         <td>@vagter.Slut</td>
                         <td>
-                            <button @onclick="() => TilfojVagt(vagter)">Tilføj vagt</button>
+                            <button @onclick="() => TilfojVagt(vagter)">Tag vagt</button>
                         </td>
                     </tr>
                 }
@@ -49,7 +52,7 @@ else
         </table>
     }
 
-    <h3>Du har valgt:</h3>
+    <br /><h3>Du har valgt:</h3>
     <table class="table">
         <thead>
             @if (valgte.Any()) // Vis kun header cells, hvis der er valgte vagter
@@ -58,7 +61,7 @@ else
                     <!-- Header cells for "Du har valgt" listen -->
                     <th>Dato</th>
                     <th>Lokation</th>
-                    <th>Rangering</th>
+                    <th>Prioritet</th>
                     <th>Opgave</th>
                     <th>Antal</th>
                     <th>Beskrivlse</th>
@@ -81,19 +84,20 @@ else
                     <td>@valgtVagt.Start</td>
                     <td>@valgtVagt.Slut</td>
                     <td>
-                        <img src="Billeder/Update.png" alt="Button Image" class="UpdateButton" style="width: 38px; height: 45px;" @onclick="HandleValidSubmit" />
-
-                        <img src="Billeder/Delete.png" alt="Button Image" class="DeleteButton" style="width: 38px; height: 45px;" @onclick="() => FjernVagt(valgtVagt)" />
-
-
+                    <img src="Billeder/Delete.png" alt="Button Image" class="DeleteButton" style="width: 28px; height: 35px;" @onclick="() => FjernVagt(valgtVagt)"/>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+    @if (valgte.Any()){
+    <button @onclick="HandleValidSubmit">Godkend din vagtplan</button>
+}
 }
 
 @code {
+    // Initialiser Vagter objekter "vagterne" så de kan læses og printes ud i en liste fra vores database > vagter.
+    // Samt en liste af <Vagter> "valgte" så vi kan gemme objekterne og rykke rundt på dem på vagtplan siden.
     private Vagter[]? vagterne;
     private List<Vagter> valgte = new List<Vagter>();
 
@@ -125,12 +129,17 @@ else
         vagterne = vagterne.Append(valgtVagt).ToArray();
     }
 
+    // Opret en ny instans af Vagter ved klik på HandleValidSubmit, og send hver af de valgte vagter til vores kollektion "fordeling"
+    private string storedUsername;
     Vagter valgt = new();
 
     public async Task HandleValidSubmit()
     {
+        storedUsername = await localStore.GetItemAsync<string>("username");
+
         foreach (var valgtVagt in valgte)
         {
+            valgtVagt.Username = storedUsername;
             await Http.PostAsJsonAsync<Vagter>("fordeling", valgtVagt);
         }
     }

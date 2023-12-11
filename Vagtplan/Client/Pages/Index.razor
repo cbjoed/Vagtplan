@@ -3,8 +3,7 @@
 @inherits LayoutComponentBase
 @using Musikfestival.Shared.Models;
 @inject HttpClient Http;
-
-
+@inject Blazored.LocalStorage.ILocalStorageService localStore
 
 <style>
     html,
@@ -19,7 +18,7 @@
         align-items: center;
         padding-top: 20px;
         padding-bottom: 0px;
-        background-color: #7BBF9F;
+        background-color: #FFFFFF;
     }
 
     .form-signin {
@@ -64,11 +63,11 @@
 
 <main>
     <form class="form-signin" @onsubmit="AttemptLogin">
-        <h1 class="h3 mb-3 font-weight-normal">Velkommen til El Meistro</h1>
-        <input type="username" @bind="bruger.Username" class="form-control" placeholder="Brugernavn" required autofocus>
+        <center><img src="Billeder/logo.png" width="200"><br /><br />
+        <input type="text" @bind="bruger.Username" class="form-control" placeholder="Brugernavn" required autofocus>
         <input type="password" @bind="bruger.Password" class="form-control" placeholder="Kodeord" required>
    
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Log ind</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Log ind</button></center>
     </form>
 </main>
 
@@ -87,6 +86,8 @@
 
             if (authenticatedUser != null)
             {
+                await localStore.SetItemAsync("username", authenticatedUser.Username);
+
                 // Redirect to "vagtplan" after successful login
                 NavigationManager.NavigateTo("/vagtplan");
             }

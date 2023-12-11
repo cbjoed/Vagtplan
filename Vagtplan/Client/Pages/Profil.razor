@@ -1,44 +1,60 @@
 ﻿@page "/profil"
-@using Musikfestival.Shared.Models;
-@using MongoDB.Bson;
-@inject HttpClient Http;
+@using Musikfestival.Shared.Models
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@inject Blazored.LocalStorage.ILocalStorageService localStore
+
+
 
 <PageTitle>Profilside</PageTitle>
 
-<h1>Min profil</h1>
-
-@if (brugere == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-
-        <tbody>
-            @foreach (var bruger in brugere)
-            {
-                <tr class="brugerRow">
-                    <td>
-                        <h2>@bruger.Navn - @bruger.Email</h2>
-                        Beskrivelse : @bruger.Beskrivelse
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-
-
-}
-
+@* Vi kalder username igennem localstorage og viser derved i en string, vedkommendes navn. *@
 @code {
-
+    private string storedUsername;
     private Bruger[]? brugere;
+    private Bruger matchingUser;
 
     protected override async Task OnInitializedAsync()
     {
+        storedUsername = await localStore.GetItemAsync<string>("username");
         brugere = await Http.GetFromJsonAsync<Bruger[]>("/api/bruger");
-
+        matchingUser = brugere.FirstOrDefault(user => user.Username == storedUsername);
     }
 }
+
+<br />
+<h1>Velkommen, @storedUsername</h1>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/UI/Profil.css" />
+    <title>Container Box</title>
+</head>
+
+<body>
+    @if (matchingUser != null)
+    {
+        <br />
+    <div class="container-box">
+        <h3>Kontaktoplysninger</h3>
+        <p><b>Navn:</b> @matchingUser.Navn</p>
+        <p><b>Email:</b> @matchingUser.Email</p>
+        <p><b>Kontaktnummer:</b> @matchingUser.Tlf</p>
+        </div>
+    }
+        </body>
+
+<body>
+    @if (matchingUser != null)
+    {
+        <br />
+        <div class="container-box">
+            <h3>Biografi</h3>
+            <p>@matchingUser.Navn er @matchingUser.Type</p>
+            <p>@matchingUser.Beskrivelse</p>
+        </div>
+    }
+    <br />
+    <button>Rediger</button>
+</body>

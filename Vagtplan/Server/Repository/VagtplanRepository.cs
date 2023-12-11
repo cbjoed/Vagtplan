@@ -35,6 +35,7 @@ namespace Musikfestival.Repositories
                 { "Antal", vagter.Antal },
                 { "Start", vagter.Start },
                 { "Slut", vagter.Slut },
+                { "Username", vagter.Username },
             };
 
             fordeling.InsertOne(vagterDocument);

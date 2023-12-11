@@ -18,6 +18,7 @@ namespace Musikfestival.Shared.Models
         public string Slut { get; set; } = String.Empty;
         public string Username { get; set; } = String.Empty;
         public string Beskrivelse { get; set; } = String.Empty;
+        public bool Optaget { get; set; } = false;
     }
 }
 
