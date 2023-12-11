@@ -26,7 +26,7 @@ public class VagtplanController : ControllerBase
     [Route("/api/vagter")]
     public void UpdatePlan(Vagter vagter)
     {
-        vagtRepo.UpdatePlan(vagter);
+     //   vagtRepo.UpdatePlan(vagter);
     }
 
     [HttpPost]

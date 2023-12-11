@@ -41,18 +41,18 @@ else
                     <td>@vagter.Beskrivelse</td>
                     <td>@vagter.Start</td>
                     <td>
-                        @if (isEditing && vagter == valgt)
-                        {
-                            <!-- Display input fields for editing -->
-                            <p><b>Dato:</b> <input @bind="vagter.Dato" /></p>
-                            <p><b>Lokation:</b> <input @bind="vagter.Lokation" /></p>
-                            <p><b>Prioritet:</b> <input @bind="vagter.Rangering" /></p>
-                            <!-- Add more input fields as needed -->
+                        <!--@if (isEditing && vagter == valgt)-->
+     {
+         <!-- Display input fields for editing -->
+                        <p><b>Dato:</b> <input @bind="vagter.Dato" /></p>
+                        <p><b>Lokation:</b> <input @bind="vagter.Lokation" /></p>
+                        <p><b>Prioritet:</b> <input @bind="vagter.Rangering" /></p>
+                        <!-- Add more input fields as needed -->
                         }
                         else
                         {
-                            <!-- Display non-editable fields -->
-                            <button @onclick="StartEditing">Rediger</button>
+                        <!-- Display non-editable fields -->
+                        <button @onclick="StartEditing">Rediger</button>
                         }
                     </td>
                 </tr>
