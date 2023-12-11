@@ -16,7 +16,7 @@
         display: center;
         -ms-flex-align: center;
         align-items: center;
-        padding-top: 20px;
+        padding-top: 0px;
         padding-bottom: 0px;
         background-color: #FFFFFF;
     }
@@ -62,6 +62,7 @@
 </style>
 
 <main>
+    <img src="Billeder/logo.png" style="width: 400px; height:200px;" />
     <form class="form-signin" @onsubmit="AttemptLogin">
         <center><img src="Billeder/logo.png" width="200"><br /><br />
         <input type="text" @bind="bruger.Username" class="form-control" placeholder="Brugernavn" required autofocus>
