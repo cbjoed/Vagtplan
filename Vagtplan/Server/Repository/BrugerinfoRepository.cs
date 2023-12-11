@@ -82,7 +82,7 @@ namespace Musikfestival.Repositories
                 {
                     Username = result.Contains("username") ? result["username"].AsString : null,
                     Password = result.Contains("password") ? result["password"].AsString : null,
-                
+                    Type = result.Contains("type") ? result["type"].AsString : null,
                 };
 
                 return authenticatedUser;

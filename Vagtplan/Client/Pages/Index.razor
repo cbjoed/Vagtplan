@@ -87,9 +87,15 @@
             if (authenticatedUser != null)
             {
                 await localStore.SetItemAsync("username", authenticatedUser.Username);
-
-                // Redirect to "vagtplan" after successful login
-                NavigationManager.NavigateTo("/vagtplan");
+                await localStore.SetItemAsync("type", authenticatedUser.Type);
+                if (authenticatedUser.Type == "Koordinator")
+                {
+                    NavigationManager.NavigateTo("/koordinator");
+                }
+                else
+                {
+                    NavigationManager.NavigateTo("/vagtplan");
+                }
             }
             else
             {
