@@ -6,21 +6,21 @@ using Musikfestival.Repositories;
 
 [ApiController]
 [Route("/api/bruger")]
-public class ProfilController : ControllerBase
+public class BrugerController : ControllerBase
 {
 
     private IBruger brugerRepo;
 
-    public ProfilController(IBruger brugerRepo)
+    public BrugerController(IBruger brugerRepo)
     {
         this.brugerRepo = brugerRepo;
     }
 
-    /*[HttpPost]
+    [HttpPut]
     public void Update(Bruger bruger)
     {
         brugerRepo.Update(bruger);
-    }*/
+    }
 
     [HttpGet]
     public IEnumerable<Bruger> Get()

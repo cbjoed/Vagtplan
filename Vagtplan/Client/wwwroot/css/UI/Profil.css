@@ -1,0 +1,13 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.container-box {
+    width: 400px; /* Just an example width, adjust as needed */
+    padding: 20px;
+    background-color: #f0f0f0; /* Background color for the box */
+    border: 1px solid #ccc; /* Border for the box */
+}

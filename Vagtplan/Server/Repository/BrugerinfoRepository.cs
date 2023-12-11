@@ -13,41 +13,37 @@ namespace Musikfestival.Repositories
 
         MongoClient dbClient;
         IMongoDatabase database;
-        IMongoCollection<BsonDocument> bruger;
+        IMongoCollection<BsonDocument> brugerKollektion;
 
         public BrugerinfoRepository()
         {
             dbClient = new MongoClient(connectionString);
             database = dbClient.GetDatabase("BrugerDB");
-            bruger = database.GetCollection<BsonDocument>("bruger");
+            brugerKollektion = database.GetCollection<BsonDocument>("bruger");
         }
 
-        /*public void Update(Bruger bruger)
+        public void Update(Bruger bruger)
         {
-            var filter = Builders<BsonDocument>.Filter.Eq("Id", bruger.Id); // Antager "Id" som unikt identifikationsfelt
-
+            var filter = Builders<BsonDocument>.Filter.Eq("username", bruger.Username);
             var update = Builders<BsonDocument>.Update
 
-            .Set("Username", bruger.Username)
-            .Set("Password", bruger.Password)
-            .Set("Type", bruger.Type)
-            .Set("Navn", bruger.Navn)
-            .Set("Adresse", bruger.Adresse)
-            .Set("Email", bruger.Email)
-            .Set("Telefon", bruger.Telefon)
-            .Set("Beskrivelse", bruger.Beskrivelse);
+            .Set("navn", bruger.Navn)
+            .Set("adresse", bruger.Adresse)
+            .Set("email", bruger.Email)
+            .Set("tlf", bruger.Tlf)
+            .Set("beskrivelse", bruger.Beskrivelse);
 
-            var updateResult = bruger.UpdateOne(filter, update);
+            var updateResult = brugerKollektion.UpdateOne(filter, update);
 
             if (updateResult.ModifiedCount == 0)
             {
                 Console.WriteLine("Opdatering kunne ikke gennemføres da værdien er nul.");
             }
-        }*/
+        }
 
         public Bruger[] GetAllBrugere()
         {
-            var result = bruger.Find(new BsonDocument()).ToList();
+            var result = brugerKollektion.Find(new BsonDocument()).ToList();
 
             List<Bruger> brugere = new List<Bruger>();
 
@@ -74,7 +70,7 @@ namespace Musikfestival.Repositories
         public async Task<Bruger> AuthenticateUserAsync(string username, string password)
         {
 
-            var result = await bruger.Find(
+            var result = await brugerKollektion.Find(
                 Builders<BsonDocument>.Filter.Eq("username", username) &
                 Builders<BsonDocument>.Filter.Eq("password", password))
                 .FirstOrDefaultAsync();
@@ -85,7 +81,7 @@ namespace Musikfestival.Repositories
                 {
                     Username = result.Contains("username") ? result["username"].AsString : null,
                     Password = result.Contains("password") ? result["password"].AsString : null,
-                
+                    Type = result.Contains("type") ? result["type"].AsString : null,
                 };
 
                 return authenticatedUser;

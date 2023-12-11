@@ -12,5 +12,6 @@ namespace Musikfestival.Repositories
 
         public Bruger[] GetAllBrugere();
         Task<Bruger> AuthenticateUserAsync(string username, string password);
+        public void Update(Bruger bruger);
     }
 }

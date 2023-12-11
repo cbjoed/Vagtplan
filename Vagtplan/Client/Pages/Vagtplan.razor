@@ -1,71 +1,146 @@
-﻿@page "/vagtplan"
+﻿@page "/Vagtplan"
+@using Musikfestival.Shared.Models
+@using MongoDB.Bson
+@using MongoDB.Driver
+@inject HttpClient Http;
+@inject Blazored.LocalStorage.ILocalStorageService localStore
 
-<h3>Vagtplan</h3>
+<PageTitle>Vagtplan</PageTitle>
 
-@code {
-    private int year;
-    private int month;
-    private int[,] calendar;
-
-    protected override void OnInitialized()
+@if (vagterne == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @if (vagterne.Any()) // Vis kun tabellen, hvis der er nogen vagter tilbage
     {
-        year = DateTime.Now.Year; // Set default year to the current year
-        month = DateTime.Now.Month; // Set default month to the current month
-        FillCalendar();
+        <br /><h3>Tilgængelige vagter</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <!-- Header cells for den øverste liste -->
+                    <th>Dato</th>
+                    <th>Lokation</th>
+                    <th>Prioritet</th>
+                    <th>Opgave</th>
+                    <th>Antal</th>
+                    <th>Beskrivlse</th>
+                    <th>Start</th>
+                    <th>Slut</th>
+                    <th>Tilføj vagt</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vagter in vagterne)
+                {
+                    <tr>
+                        <td>@vagter.Dato</td>
+                        <td>@vagter.Lokation</td>
+                        <td>@vagter.Rangering</td>
+                        <td>@vagter.Type</td>
+                        <td>@vagter.Antal</td>
+                        <td>@vagter.Beskrivelse</td>
+                        <td>@vagter.Start</td>
+                        <td>@vagter.Slut</td>
+                        <td>
+                            <button @onclick="() => ListVagt(vagter)">Tag vagt</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     }
 
-    private void FillCalendar()
-    {
-        int days = DateTime.DaysInMonth(year, month);
-        calendar = new int[6, 7];
-        int currentDay = 1;
-        var date = new DateTime(year, month, 1);
-        var dayOfWeek = (int)date.DayOfWeek;
-
-        for (int i = 0; i < calendar.GetLength(0); i++)
-        {
-            for (int j = 0; j < calendar.GetLength(1) && currentDay - dayOfWeek + 1 <= days; j++)
+    <br /><h3>Du har valgt:</h3>
+    <table class="table">
+        <thead>
+            @if (valgte.Any()) // Vis kun header cells, hvis der er valgte vagter
             {
-                if (i == 0 && month > j)
-                {
-                    calendar[i, j] = 0;
-                }
-                else
-                {
-                    calendar[i, j] = currentDay - dayOfWeek + 1;
-                    currentDay++;
-                }
+                <tr>
+                    <!-- Header cells for "Du har valgt" listen -->
+                    <th>Dato</th>
+                    <th>Lokation</th>
+                    <th>Prioritet</th>
+                    <th>Opgave</th>
+                    <th>Antal</th>
+                    <th>Beskrivlse</th>
+                    <th>Start</th>
+                    <th>Slut</th>
+                    <th>Fjern vagt</th>
+                </tr>
             }
+        </thead>
+        <tbody>
+            @foreach (var valgtVagt in valgte)
+            {
+                <tr>
+                    <td>@valgtVagt.Dato</td>
+                    <td>@valgtVagt.Lokation</td>
+                    <td>@valgtVagt.Rangering</td>
+                    <td>@valgtVagt.Type</td>
+                    <td>@valgtVagt.Antal</td>
+                    <td>@valgtVagt.Beskrivelse</td>
+                    <td>@valgtVagt.Start</td>
+                    <td>@valgtVagt.Slut</td>
+                    <td>
+                    <img src="Billeder/Delete.png" alt="Button Image" class="DeleteButton" style="width: 28px; height: 35px;" @onclick="() => FjernListedVagt(valgtVagt)"/>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (valgte.Any()){
+    <button @onclick="HandleValidSubmit">Godkend din vagtplan</button>
+}
+}
+
+@code {
+    // Initialiser Vagter objekter "vagterne" så de kan læses og printes ud i en liste fra vores database > vagter.
+    // Samt en liste af <Vagter> "valgte" så vi kan gemme objekterne og rykke rundt på dem på vagtplan siden.
+    private Vagter[]? vagterne;
+    private List<Vagter> valgte = new List<Vagter>();
+
+    Vagter vagter = new();
+
+    private EditContext aEditContext;
+
+    protected override async Task OnInitializedAsync()
+    {
+        aEditContext = new EditContext(vagter);
+        vagterne = await Http.GetFromJsonAsync<Vagter[]>("/api/vagter");
+    }
+
+    private void ListVagt(Vagter valgtVagt)
+    {
+        // Tilføj den valgte vagt til "Du har valgt" listen
+        valgte.Add(valgtVagt);
+
+        // Fjern den valgte vagt fra den øverste liste
+        vagterne = vagterne.Where(v => v != valgtVagt).ToArray();
+    }
+
+    private void FjernListedVagt(Vagter valgtVagt)
+    {
+        // Fjern vagten fra "Du har valgt" listen
+        valgte.Remove(valgtVagt);
+
+        // Tilføj vagten tilbage til den øverste liste
+        vagterne = vagterne.Append(valgtVagt).ToArray();
+    }
+
+    // Opret en ny instans af Vagter ved klik på HandleValidSubmit, og send hver af de valgte vagter til vores kollektion "fordeling"
+    private string storedUsername;
+    Vagter valgt = new();
+
+    public async Task HandleValidSubmit()
+    {
+        storedUsername = await localStore.GetItemAsync<string>("username");
+
+        foreach (var valgtVagt in valgte)
+        {
+            valgtVagt.Username = storedUsername;
+            await Http.PostAsJsonAsync<Vagter>("fordeling", valgtVagt);
         }
     }
 }
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Man</th>
-            <th>Tir</th>
-            <th>Ons</th>
-            <th>Tor</th>
-            <th>Fre</th>
-            <th>Lør</th>
-            <th>Søn</th>
-        </tr>
-    </thead>
-    <tbody>
-        @for (int i = 0; i < calendar.GetLength(0); i++)
-        {
-            <tr>
-                @for (int j = 0; j < calendar.GetLength(1); j++)
-                {
-                    <td>
-                        @if (calendar[i, j] > 0)
-                        {
-                            <text>@calendar[i, j]</text>
-                        }
-                    </td>
-                }
-            </tr>
-        }
-    </tbody>
-</table>

@@ -1,44 +1,112 @@
 ﻿@page "/profil"
-@using Musikfestival.Shared.Models;
-@using MongoDB.Bson;
-@inject HttpClient Http;
+@using Musikfestival.Shared.Models
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@inject Blazored.LocalStorage.ILocalStorageService localStore
+<style>
+    .custom-background {
+        background-color: #66BCE8
+    }
+</style>
 
 <PageTitle>Profilside</PageTitle>
 
-<h1>Min profil</h1>
-
-@if (brugere == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-
-        <tbody>
-            @foreach (var bruger in brugere)
-            {
-                <tr class="brugerRow">
-                    <td>
-                        <h2>@bruger.Id @bruger.Navn - @bruger.Email</h2>
-                        Beskrivelse : @bruger.Beskrivelse
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-
-
-}
-
 @code {
-
+    private string storedUsername;
     private Bruger[]? brugere;
+    private Bruger matchingUser;
+    private bool isEditing = false; // Flag for at indikere, om redigering er aktiv
 
     protected override async Task OnInitializedAsync()
     {
-        brugere = await Http.GetFromJsonAsync<Bruger[]>("bruger");
+        storedUsername = await localStore.GetItemAsync<string>("username");
+        brugere = await Http.GetFromJsonAsync<Bruger[]>("/api/bruger");
+        matchingUser = brugere.FirstOrDefault(user => user.Username == storedUsername);
+    }
+
+    private void StartEditing()
+    {
+        isEditing = true;
 
     }
+
+    private async Task SaveChanges()
+    {
+        var response = await Http.PutAsJsonAsync("/api/bruger", matchingUser);
+        // Gem ændringer, f.eks. ved at sende dem til serveren
+
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Changes saved successfully.");
+            isEditing = false;
+        }
+        else
+        {
+            Console.WriteLine("Failed to save changes.");
+            // Handle the failure, e.g., show an error message
+        }
+    }
 }
+
+<br />
+<h1>Velkommen, @storedUsername</h1>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/UI/Profil.css" />
+    <title>Container Box</title>
+</head>
+
+<body>
+    @if (matchingUser != null)
+    {
+        <br />
+        <div class="container-box">
+            <h3>Kontaktoplysninger</h3>
+            @if (isEditing)
+            {
+                <p><b>Navn:</b> <input @bind="matchingUser.Navn" /></p>
+                <p><b>Email:</b> <input @bind="matchingUser.Email" /></p>
+                <p><b>Kontaktnummer:</b> <input @bind="matchingUser.Tlf" /></p>
+                <p><b>Adresse:</b> <input @bind="matchingUser.Adresse" /></p>
+            }
+            else
+            {
+                <p><b>Navn:</b> @matchingUser.Navn</p>
+                <p><b>Email:</b> @matchingUser.Email</p>
+                <p><b>Kontaktnummer:</b> @matchingUser.Tlf</p>
+                <p><b>Adresse:</b> @matchingUser.Adresse</p>
+            }
+        </div>
+    }
+</body>
+
+<body>
+    @if (matchingUser != null)
+    {
+        <br />
+        <div class="container-box">
+            <h3>Biografi</h3>
+            @if (isEditing)
+            {
+                <p><b>Type:</b> @matchingUser.Type</p>
+                <p><b>Beskrivelse:</b> <input @bind="matchingUser.Beskrivelse" /></p>
+            }
+            else
+            {
+                <p><b>Type:</b> @matchingUser.Type</p>
+                <p><b>Beskrivelse:</b> @matchingUser.Beskrivelse</p>
+            }
+        </div>
+    }
+    <br />
+    @if (isEditing)
+    {
+        <button @onclick="SaveChanges">Gem ændringer</button>
+    }
+    else
+    {
+        <button @onclick="StartEditing">Rediger</button>
+    }
+</body>
