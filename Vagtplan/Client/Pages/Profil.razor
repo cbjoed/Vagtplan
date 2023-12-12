@@ -3,11 +3,6 @@
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 @inject Blazored.LocalStorage.ILocalStorageService localStore
-<style>
-    .custom-background {
-        background-color: #66BCE8
-    }
-</style>
 
 <PageTitle>Profilside</PageTitle>
 
@@ -48,8 +43,9 @@
     }
 }
 
+
 <br />
-<h1>Velkommen, @storedUsername</h1>
+<center><h1>Velkommen, @storedUsername</h1></center>
 
 <head>
     <meta charset="UTF-8">
@@ -90,23 +86,23 @@
             <h3>Biografi</h3>
             @if (isEditing)
             {
-                <p><b>Type:</b> @matchingUser.Type</p>
-                <p><b>Beskrivelse:</b> <input @bind="matchingUser.Beskrivelse" /></p>
+                <p><b>@matchingUser.Type</b></p>
+                <p><b>Om mig:</b> <input @bind="matchingUser.Beskrivelse" /></p>
             }
             else
             {
-                <p><b>Type:</b> @matchingUser.Type</p>
-                <p><b>Beskrivelse:</b> @matchingUser.Beskrivelse</p>
+                <p><b>@matchingUser.Type</b></p>
+                <p><b>Om mig:</b> @matchingUser.Beskrivelse</p>
             }
         </div>
     }
     <br />
     @if (isEditing)
     {
-        <button @onclick="SaveChanges">Gem ændringer</button>
+        <center><button @onclick="SaveChanges">Gem ændringer</button></center>
     }
     else
     {
-        <button @onclick="StartEditing">Rediger</button>
+        <center><button @onclick="StartEditing">Rediger</button></center>
     }
 </body>

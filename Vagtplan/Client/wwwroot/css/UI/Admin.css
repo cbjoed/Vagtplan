@@ -1,0 +1,12 @@
+﻿namespace Vagtplan.Client.wwwroot.css.UI
+
+.edit-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.edit-container p {
+    margin-bottom: 5px; /* Adjust as needed */
+}
+

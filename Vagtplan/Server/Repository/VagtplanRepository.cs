@@ -13,14 +13,14 @@ namespace Musikfestival.Repositories
 
         MongoClient dbClient;
         IMongoDatabase database;
-        IMongoCollection<BsonDocument> vagter;
+        IMongoCollection<BsonDocument> vagterKollektion;
         IMongoCollection<BsonDocument> fordeling;
 
         public VagtplanRepository()
         {
             dbClient = new MongoClient(connectionString);
             database = dbClient.GetDatabase("VagterDB");
-            vagter = database.GetCollection<BsonDocument>("vagter");
+            vagterKollektion = database.GetCollection<BsonDocument>("vagter");
             fordeling = database.GetCollection<BsonDocument>("fordeling");
         }
 
@@ -37,23 +37,29 @@ namespace Musikfestival.Repositories
 
         public void UpdatePlan(Vagter vagter)
         {
-            BsonDocument vagterDocument = new BsonDocument
+            var filter = Builders<BsonDocument>.Filter.Eq("vagtId", vagter.VagtId);
+            var update = Builders<BsonDocument>.Update
+
+            .Set("dato", vagter.Dato)
+            .Set("lokation", vagter.Lokation)
+            .Set("rangering", vagter.Rangering)
+            .Set("type", vagter.Type)
+            .Set("antal", vagter.Antal)
+            .Set("beskrivelse", vagter.Beskrivelse)
+            .Set("start", vagter.Start)
+            .Set("slut", vagter.Slut);
+
+            var updateResult = vagterKollektion.UpdateOne(filter, update);
+
+            if (updateResult.ModifiedCount == 0)
             {
-                { "dato", vagter.Dato },
-                { "lokation", vagter.Lokation },
-                { "rangering", vagter.Rangering },
-                { "type", vagter.Type },
-                { "antal", vagter.Antal },
-                { "start", vagter.Start },
-                { "slut", vagter.Slut },
-                { "beskrivelse", vagter.Beskrivelse },
-                { "vagtId", vagter.VagtId },
-            };
+                Console.WriteLine("Opdatering kunne ikke gennemføres da værdien er nul.");
+            }
         }
 
         public Vagter[] GetAllVagter()
         {
-            var result = vagter.Find(new BsonDocument()).ToList();
+            var result = vagterKollektion.Find(new BsonDocument()).ToList();
 
             List<Vagter> vagtere = new List<Vagter>();
 
