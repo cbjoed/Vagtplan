@@ -1,5 +1,4 @@
 ﻿namespace Vagtplan.Client.wwwroot.css.UI
-
 body {
     height: 100px;
 }
@@ -11,7 +10,6 @@ body {
     align-items: center;
     padding-top: 0px;
     padding-bottom: 0px;
-    background-image href="logo": 50%;
 }
 
     .form-signin {

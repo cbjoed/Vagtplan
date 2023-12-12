@@ -1,19 +1,12 @@
 ﻿@inherits LayoutComponentBase
-
-<style>
-    html,
-    body {
-        background-color: #FFF4E3;
-    }
-</style>
-
-<main>
+<div class="background-container" style="background-image: url('billeder/baggrund_fade.png')">
+    <main>
         <div class="navbar">
             <NavMenu />
-        </div
-        <article class="content px-4">
+        </div>
+         <article class="content px-4">
             <br />
             @Body
         </article>
-</main>
-
+    </main>
+</div>
