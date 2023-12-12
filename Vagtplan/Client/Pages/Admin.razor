@@ -3,6 +3,7 @@
 @using MongoDB.Bson
 @using MongoDB.Driver
 @inject HttpClient Http;
+@inject NavigationManager NavigationManager
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 <nav class="navbar2 fixed-top navbar-expand-lg navbar-light" style="background-color: #917C5A">
     <a class="navbar-brand" style="color: black; font-size: 20px; padding-left: 20px; padding-right: 5px;" href="/profil">Min Profil</a>
@@ -74,7 +75,7 @@ else
             {
                 <button @onclick="() => UpdatePlan(valgt)">Gem</button>
             }
-            else
+            else if (isEditing2 == true)
             {
                 <button @onclick="() => CreatePlan(valgt)">Gem ny vagt</button>
             }
@@ -126,6 +127,8 @@ else
     private async Task CreatePlan(Vagter nyvagt)
     {
         await Http.PostAsJsonAsync<Vagter>("/api/vagter", nyvagt);
+
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         isEditing2 = false;
     }
 
@@ -139,28 +142,17 @@ else
 
         if (response.IsSuccessStatusCode)
         {
-            Console.WriteLine("Changes saved successfully.");
             isEditing = false;
         }
-        else
-        {
-            Console.WriteLine("Failed to save changes.");
-            // Handle the failure, e.g., show an error message
-        }
     }
+
     private async Task DeleteVagt(int vagtId)
     {
         var response = await Http.DeleteAsync($"/api/vagter/{vagtId}");
 
         if (response.IsSuccessStatusCode)
         {
-            Console.WriteLine("Vagt deleted successfully.");
-            // Refresh the vagterne array or perform any necessary updates
-        }
-        else
-        {
-            Console.WriteLine("Failed to delete vagt.");
-            // Handle the failure, e.g., show an error message
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
     }
 
