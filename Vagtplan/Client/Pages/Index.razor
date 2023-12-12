@@ -6,7 +6,18 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 
 <link rel="stylesheet" href="css/UI/Index.css" />
-
+<style>
+    body {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        background-image: url('Billeder/baggrund_fade.png');
+        background-size: cover;
+        background-position: center;
+    }
+</style>
 <main>
     <form class="form-signin" @onsubmit="AttemptLogin">
         <center><img src="Billeder/logo1.png" width="200"><br /><br />
