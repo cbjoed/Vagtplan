@@ -74,6 +74,11 @@ namespace Musikfestival.Repositories
                 Console.WriteLine("Opdatering kunne ikke gennemføres da værdien er nul.");
             }
         }
+        public async Task DeleteVagt(int vagtId)
+        {
+            var filter = Builders<BsonDocument>.Filter.Eq("vagtId", vagtId);
+            await vagterKollektion.DeleteOneAsync(filter);
+        }
 
         public Vagter[] GetAllVagter()
         {

@@ -42,4 +42,12 @@ public class VagtplanController : ControllerBase
     {
         vagtRepo.CreatePlan(nyvagt);
     }
+
+    [HttpDelete]
+    [Route("/api/vagter/{vagtId}")]
+    public void DeleteVagt(int vagtId)
+    {
+        vagtRepo.DeleteVagt(vagtId);
+    }
+
 }

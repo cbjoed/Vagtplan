@@ -50,6 +50,7 @@ else
                         {
                             <!-- Display non-editable fields -->
                             <button @onclick="() => StartEditing(vagter)" style="color:white; background-color: #191A3B;">Rediger</button>
+                            <button @onclick="() => DeleteVagt(vagter.VagtId)" style="color:white; background-color: #FF0000;">Slet</button>
                         }
                     </td>
                 </tr>
@@ -137,4 +138,20 @@ else
             // Handle the failure, e.g., show an error message
         }
     }
+    private async Task DeleteVagt(int vagtId)
+    {
+        var response = await Http.DeleteAsync($"/api/vagter/{vagtId}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Vagt deleted successfully.");
+            // Refresh the vagterne array or perform any necessary updates
+        }
+        else
+        {
+            Console.WriteLine("Failed to delete vagt.");
+            // Handle the failure, e.g., show an error message
+        }
+    }
+
 }

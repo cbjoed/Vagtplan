@@ -12,5 +12,6 @@ namespace Musikfestival.Repositories
         public void UpdatePlan(Vagter vagter);
         public void CreatePlan(Vagter nyvagt);
         void AddVagt(Vagter vagter);
+        Task DeleteVagt(int vagtId);
     }
 }
