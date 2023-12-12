@@ -44,7 +44,7 @@ else
                         <td>@vagter.Start</td>
                         <td>@vagter.Slut</td>
                         <td>
-                            <button @onclick="() => ListVagt(vagter)">Tag vagt</button>
+                            <button @onclick="() => ListVagt(vagter)" style="color:white; background-color: #191A3B;">Tag vagt</button>
                         </td>
                     </tr>
                 }
@@ -91,7 +91,7 @@ else
         </tbody>
     </table>
     @if (valgte.Any()){
-    <button @onclick="HandleValidSubmit">Godkend din vagtplan</button>
+        <button @onclick="HandleValidSubmit" style="color:white; background-color: #191A3B;">Godkend din vagtplan</button>
 }
 }
 
