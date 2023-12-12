@@ -7,6 +7,15 @@
 
 <PageTitle>Vagtplan</PageTitle>
 <style>
+    h3 {
+        color: white;
+    }
+    th {
+        color: white;
+    }
+    td {
+        color: #000000;
+    }
     body {
         height: 100vh;
         display: flex;
@@ -31,7 +40,7 @@ else
             <thead>
                 <tr>
                     <!-- Header cells for den øverste liste -->
-                    <th>Dato</th>
+                    <th >Dato</th>
                     <th>Lokation</th>
                     <th>Prioritet</th>
                     <th>Opgave</th>
@@ -42,7 +51,7 @@ else
                     <th>Tilføj vagt</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody style="background-color: #FFFFFF">
                 @foreach (var vagter in vagterne)
                 {
                     <tr>
@@ -55,7 +64,7 @@ else
                         <td>@vagter.Start</td>
                         <td>@vagter.Slut</td>
                         <td>
-                            <button @onclick="() => ListVagt(vagter)" style="color:white; background-color: #191A3B;">Tag vagt</button>
+                            <button @onclick="() => ListVagt(vagter)" style="color:white; background-color: #061C59;">Tag vagt</button>
                         </td>
                     </tr>
                 }
@@ -82,7 +91,7 @@ else
                 </tr>
             }
         </thead>
-        <tbody>
+        <tbody style="background-color: white">
             @foreach (var valgtVagt in valgte)
             {
                 <tr>
@@ -102,7 +111,7 @@ else
         </tbody>
     </table>
     @if (valgte.Any()){
-        <button @onclick="HandleValidSubmit" style="color:white; background-color: #191A3B;">Godkend din vagtplan</button>
+        <button @onclick="HandleValidSubmit" style="color:white; background-color: #061C59;">Godkend din vagtplan</button>
 }
 }
 

@@ -30,7 +30,7 @@ else
 {
     <br />
     <h3>Alle vagter</h3>
-    <button @onclick="() => OpretVagt()">Opret ny vagt</button>
+    <button @onclick="() => OpretVagt()" style="color:white; background-color: #061C59;">Opret ny vagt</button>
     <table class="table">
         <thead>
             <tr>
@@ -61,8 +61,8 @@ else
                         @if (!isEditing || vagter != valgt)
                         {
                             <!-- Display non-editable fields -->
-                            <button @onclick="() => StartEditing(vagter)" style="color:white; background-color: #191A3B;">Rediger</button>
-                            <button @onclick="() => DeleteVagt(vagter.VagtId)" style="color:white; background-color: #FF0000;">Slet</button>
+                            <button @onclick="() => StartEditing(vagter)" style="color:white; background-color: #061C59;">Rediger</button>
+                            <button @onclick="() => DeleteVagt(vagter.VagtId)" style="color:white; background-color: #061C59;">Slet</button>
                         }
                     </td>
                 </tr>
@@ -84,11 +84,11 @@ else
                 <p>Slut: <input @bind="valgt.Slut" /></p>
             @if (isEditing == true)
             {
-                <button @onclick="() => UpdatePlan(valgt)">Gem</button>
+                <button @onclick="() => UpdatePlan(valgt)" style="color:white; background-color: #061C59;">Gem</button>
             }
             else if (isEditing2 == true)
             {
-                <button @onclick="() => CreatePlan(valgt)">Gem ny vagt</button>
+                <button @onclick="() => CreatePlan(valgt)" style="color:white; background-color: #061C59;">Gem ny vagt</button>
             }
             <button @onclick="CancelEdit">Annuller</button>
         </div>
