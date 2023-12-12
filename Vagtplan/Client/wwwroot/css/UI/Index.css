@@ -1,18 +1,18 @@
 ﻿namespace Vagtplan.Client.wwwroot.css.UI
 
-body {
-    height: 100px;
-}
+    body {
+        height: 100px;
+    }
 
-body {
-    display: -ms-flexbox;
-    display: center;
-    -ms-flex-align: center;
-    align-items: center;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    background-color: #FFF4E3;
-}
+    body {
+        display: -ms-flexbox;
+        display: center;
+        -ms-flex-align: center;
+        align-items: center;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        background-color: #FFFFFF;
+    }
 
     .form-signin {
         width: 100%;
@@ -28,11 +28,9 @@ body {
         .form-signin .form-control {
             position: relative;
             box-sizing: border-box;
-            border-color: #FED4C3;
             height: auto;
             padding: 10px;
             font-size: 16px;
-            background-color: #FED4C3;
         }
 
             .form-signin .form-control:focus {

@@ -46,7 +46,7 @@ else
                         @if (!isEditing || vagter != valgt)
                         {
                             <!-- Display non-editable fields -->
-                            <button @onclick="() => StartEditing(vagter)" style="color:white; background-color: #191A3B;">Rediger</button>
+                            <button @onclick="() => StartEditing(vagter)">Rediger</button>
                         }
                     </td>
                 </tr>
@@ -66,9 +66,16 @@ else
                 <p>Beskrivelse: <input @bind="valgt.Beskrivelse" /></p>
                 <p>Start: <input @bind="valgt.Start" /></p>
                 <p>Slut: <input @bind="valgt.Slut" /></p>
-            <button @onclick="() => UpdatePlan(valgt)" style="color: white; background-color: #191A3B">Gem</button>
-            <button @onclick="CancelEdit" style="color: white; background-color: #191A3B">Annuller</button>
-            </div>
+            @if (isEditing == true)
+            {
+                <button @onclick="() => UpdatePlan(valgt)">Gem</button>
+                <button @onclick="CancelEdit">Annuller</button>
+            }
+            else
+            {
+                <button @onclick="() => CreatePlan(valgt)">Gem ny vagt</button>
+            }
+        </div>
         }
     }
 
