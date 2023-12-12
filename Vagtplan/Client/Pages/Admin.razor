@@ -15,6 +15,7 @@ else
 {
     <br />
     <h3>Alle vagter</h3>
+    <button @onclick="() => OpretVagt()">Opret ny vagt</button>
     <table class="table">
         <thead>
             <tr>
@@ -54,7 +55,7 @@ else
     </table>
 
     <!-- Display input fields for editing -->
-    @if (isEditing && valgt != null)
+    @if (isEditing || isEditing2)
         {
             <div>
                 <p>Dato: <input @bind="valgt.Dato" /></p>
@@ -65,9 +66,16 @@ else
                 <p>Beskrivelse: <input @bind="valgt.Beskrivelse" /></p>
                 <p>Start: <input @bind="valgt.Start" /></p>
                 <p>Slut: <input @bind="valgt.Slut" /></p>
+            @if (isEditing == true)
+            {
                 <button @onclick="() => UpdatePlan(valgt)">Gem</button>
                 <button @onclick="CancelEdit">Annuller</button>
-            </div>
+            }
+            else
+            {
+                <button @onclick="() => CreatePlan(valgt)">Gem ny vagt</button>
+            }
+        </div>
         }
     }
 
@@ -79,6 +87,7 @@ else
 
 
     private bool isEditing = false;
+    private bool isEditing2 = false;
     private Vagter valgt = new Vagter();
     private void StartEditing(Vagter vagt)
     {
@@ -86,6 +95,11 @@ else
         valgt = vagt;
         isEditing = true;
 
+    }
+
+    public void OpretVagt()
+    {
+        isEditing2 = true;
     }
 
     public void CancelEdit()
@@ -100,6 +114,12 @@ else
     {
         aEditContext = new EditContext(ReadVagter);
         vagterne = await Http.GetFromJsonAsync<Vagter[]>("/api/vagter");
+    }
+
+    Vagter nyvagt = new();
+    private async Task CreatePlan(Vagter nyvagt)
+    {
+        await Http.PostAsJsonAsync<Vagter>("/api/vagter", nyvagt);
     }
 
     // Opret en ny instans af Vagter ved klik på HandleValidSubmit, og send hver af de valgte vagter til vores kollektion "vagter"
