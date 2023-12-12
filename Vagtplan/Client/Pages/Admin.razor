@@ -5,12 +5,25 @@
 @inject HttpClient Http;
 @inject NavigationManager NavigationManager
 @inject Blazored.LocalStorage.ILocalStorageService localStore
-<nav class="navbar2 fixed-top navbar-expand-lg navbar-light" style="background-color: #917C5A">
-    <a class="navbar-brand" style="color: black; font-size: 20px; padding-left: 20px; padding-right: 5px;" href="/profil">Min Profil</a>
+
+<nav class="navbar2 fixed-top navbar-expand-lg navbar-light" style="background-color: #000000; height:40px;">
+    <a> </a>
+    <a class="navbar-brand" style="color: #ffffff; border-radius: 1em; padding: 0.4em 1em; background-color: #292929; font-size: 20px;" href="/profil">Min Profil</a>
 </nav>
 
 <link rel="stylesheet" href="css/UI/Admin.css" />
 <style>
+    h3 {
+        color: white;
+    }
+
+    th {
+        color: white;
+    }
+
+    td {
+        color: #000000;
+    }
     body {
         height: 100vh;
         display: flex;
@@ -22,6 +35,7 @@
         background-position: center;
     }
 </style>
+
 @if (vagterne == null)
 {
     <p><em>Loading...</em></p>
@@ -42,10 +56,9 @@ else
                 <th>Beskrivlse</th>
                 <th>Start</th>
                 <th>Slut</th>
-                <th>Rediger vagt</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody style="background-color: white">
             @foreach (var vagter in vagterne)
             {
                 <tr>
@@ -61,8 +74,8 @@ else
                         @if (!isEditing || vagter != valgt)
                         {
                             <!-- Display non-editable fields -->
-                            <button @onclick="() => StartEditing(vagter)" style="color:white; background-color: #061C59;">Rediger</button>
-                            <button @onclick="() => DeleteVagt(vagter.VagtId)" style="color:white; background-color: #061C59;">Slet</button>
+                            <img src="Billeder/Update.png" alt="Button Image" class="UpdateButton" style="width: 28px; height: 35px;" @onclick="() => StartEditing(vagter)" />
+                            <img src="Billeder/Delete.png" alt="Button Image" class="DeleteButton" style="width: 28px; height: 35px;" @onclick="() => DeleteVagt(vagter.VagtId)" />
                         }
                     </td>
                 </tr>

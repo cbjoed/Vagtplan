@@ -59,7 +59,16 @@
     {
         <br />
         <div class="container-box">
-            <h3>Kontaktoplysninger</h3>
+            <h3>Kontaktoplysninger
+                @if (isEditing)
+                {
+                    <button @onclick="SaveChanges" style="font-size: 15px;color:white; background-color: #061C59;">Gem ændringer</button>
+                }
+                else
+                {
+                    <img src="Billeder/Update.png" alt="Button Image" class="UpdateButton" style="width: 28px; height: 35px;" @onclick="StartEditing" />
+                }
+            </h3>
             @if (isEditing)
             {
                 <p><b>Navn:</b> <input @bind="matchingUser.Navn" /></p>
@@ -97,12 +106,4 @@
         </div>
     }
     <br />
-    @if (isEditing)
-    {
-        <center><button @onclick="SaveChanges" style="color:white; background-color: #061C59;">Gem ændringer</button></center>
-    }
-    else
-    {
-        <center><button @onclick="StartEditing" style="color:white; background-color: #061C59;">Rediger</button></center>
-    }
 </body>

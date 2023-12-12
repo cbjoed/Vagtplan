@@ -28,11 +28,11 @@ body {
         .form-signin .form-control {
             position: relative;
             box-sizing: border-box;
-            border-color: #FED4C3;
+            border-color: #E1E3FB;
             height: auto;
             padding: 10px;
             font-size: 16px;
-            background-color: #FED4C3;
+            background-color: #E1E3FB;
         }
 
             .form-signin .form-control:focus {
