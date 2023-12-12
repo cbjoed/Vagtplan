@@ -70,11 +70,18 @@ else
                 <p>Beskrivelse: <input @bind="valgt.Beskrivelse" /></p>
                 <p>Start: <input @bind="valgt.Start" /></p>
                 <p>Slut: <input @bind="valgt.Slut" /></p>
-            <button @onclick="() => UpdatePlan(valgt)" style="color: white; background-color: #191A3B">Gem</button>
-            <button @onclick="CancelEdit" style="color: white; background-color: #191A3B">Annuller</button>
-            </div>
-        }
+            @if (isEditing == true)
+            {
+                <button @onclick="() => UpdatePlan(valgt)">Gem</button>
+            }
+            else
+            {
+                <button @onclick="() => CreatePlan(valgt)">Gem ny vagt</button>
+            }
+            <button @onclick="CancelEdit">Annuller</button>
+        </div>
     }
+}
 
 @code {
     // Initialiser Vagter objekter "vagterne" så de respektive attributter kan læses og printes ud i en liste fra vores database > vagter.
@@ -91,6 +98,7 @@ else
 
         valgt = vagt;
         isEditing = true;
+        isEditing2 = true;
 
     }
 
@@ -102,6 +110,7 @@ else
     public void CancelEdit()
     {
         isEditing = false;
+        isEditing2 = false;
     }
 
     Vagter ReadVagter = new();
@@ -117,6 +126,7 @@ else
     private async Task CreatePlan(Vagter nyvagt)
     {
         await Http.PostAsJsonAsync<Vagter>("/api/vagter", nyvagt);
+        isEditing2 = false;
     }
 
     // Opret en ny instans af Vagter ved klik på HandleValidSubmit, og send hver af de valgte vagter til vores kollektion "vagter"
