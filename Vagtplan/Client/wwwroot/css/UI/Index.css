@@ -33,23 +33,18 @@ body {
             padding: 10px;
             font-size: 16px;
             background-color: #E1E3FB;
-            padding-bottom: 5px;
+            margin-bottom: 15px;
+            border-radius: 5px;
         }
 
-            .form-signin .form-control:focus {
-                z-index: 2;
-            }
-
         .form-signin input[type="username"] {
-            margin-bottom: -1px;
+            margin-bottom: 5px;
             border-bottom-right-radius: 0;
             border-bottom-left-radius: 0;
         }
 
         .form-signin input[type="password"] {
-            margin-bottom: 10px;
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
+            margin-bottom: 15px;
         }
 
     .navbar {
