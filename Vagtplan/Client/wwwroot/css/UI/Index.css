@@ -33,6 +33,7 @@ body {
             padding: 10px;
             font-size: 16px;
             background-color: #E1E3FB;
+            padding-bottom: 5px;
         }
 
             .form-signin .form-control:focus {
