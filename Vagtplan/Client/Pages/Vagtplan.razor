@@ -182,7 +182,14 @@ else
             valgtVagt.Username = storedUsername;
             await Http.PostAsJsonAsync<Vagter>("fordeling", valgtVagt);
         }
+
+        // Fjern de valgte vagter fra den valgte liste
+        valgte.Clear();
+
+        // Opdater vagterne ved at hente dem igen fra API'en (vagterne, der ikke er valgt)
+        vagterne = await Http.GetFromJsonAsync<Vagter[]>("/api/vagter");
     }
+
     private void SorterDato()
     {
         if (sortAscendingByDato)

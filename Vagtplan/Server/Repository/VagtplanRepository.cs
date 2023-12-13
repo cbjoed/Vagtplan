@@ -26,16 +26,21 @@ namespace Musikfestival.Repositories
 
         public void AddVagt(Vagter vagter)
         {
-            var existingUsername = fordeling.Find(Builders<BsonDocument>.Filter.Eq("username", vagter.Username)).FirstOrDefault();
+            // Check om username allerede findes i "fordeling"
+            var existingUsernameInFordeling = fordeling.Find(Builders<BsonDocument>.Filter.And(
+                Builders<BsonDocument>.Filter.Eq("vagtId", vagter.VagtId),
+                Builders<BsonDocument>.Filter.Eq("username", vagter.Username)
+            )).FirstOrDefault();
 
-            if (existingUsername != null)
+            if (existingUsernameInFordeling != null)
             {
-                // Håndter tilfælde, hvor der allerede er en vagt med det samme username
+                // Håndter tilfælde, hvor der allerede er en vagt med det samme username i "fordeling"
                 // Du kan kaste en exception eller håndtere det på anden måde afhængigt af din logik
                 // Eksempel:
-                throw new InvalidOperationException($"Kunne ikke oprette vagt. Der er allerede en vagt med username: {vagter.Username}");
+                throw new InvalidOperationException($"Kunne ikke oprette vagt. Der er allerede en vagt med username: {vagter.Username} i fordeling");
             }
 
+            // Check om antal er større end 0
             var vagtFull = vagterKollektion.Find(Builders<BsonDocument>.Filter.Eq("vagtId", vagter.VagtId)).FirstOrDefault();
 
             if (vagtFull != null)
@@ -51,19 +56,33 @@ namespace Musikfestival.Repositories
                 }
             }
 
+            // Opret dokument i "vagterKollektion"
             BsonDocument vagterDocument = new BsonDocument
-            {
-                { "vagtId", vagter.VagtId },
-                { "username", vagter.Username },
-            };
+    {
+        { "vagtId", vagter.VagtId },
+        { "username", vagter.Username },
+    };
 
+            // Opdater antal i "vagterKollektion"
             var filter = Builders<BsonDocument>.Filter.Eq("vagtId", vagter.VagtId);
             var update = Builders<BsonDocument>.Update.Inc("antal", -1);
-
             var result = vagterKollektion.UpdateOne(filter, update);
 
-            fordeling.InsertOne(vagterDocument);
+            // Check om opdateringen var succesfuld og antal var større end 0
+            if (result.IsAcknowledged && result.ModifiedCount > 0)
+            {
+                // Opret dokument i "fordeling"
+                fordeling.InsertOne(vagterDocument);
+            }
+            else
+            {
+                // Håndter tilfælde, hvor antal er 0 eller opdateringen ikke lykkedes
+                // Du kan kaste en exception eller håndtere det på anden måde afhængigt af din logik
+                // Eksempel:
+                throw new InvalidOperationException("Kunne ikke oprette vagt i fordeling. Antal er muligvis 0.");
+            }
         }
+
 
         public void CreatePlan (Vagter nyvagt)
         {
