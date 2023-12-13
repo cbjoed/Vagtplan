@@ -1,8 +1,13 @@
 ﻿@inherits LayoutComponentBase
 
+@{
+    string userType = "frivillig"; 
+    string vagtplanHref = userType == "frivillig" ? "/Vagtplan" : "/koordinator";
+}
+
 <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #000000">
     <a> </a>
-    <a class="navbar-brand" style="color: #ffffff; border-radius: 1em; padding: 0.4em 1em; background-color: #292929; font-size: 20px;" href="/vagtplan">Vagtplan</a>
+    <a class="navbar-brand" style="color: #ffffff; border-radius: 1em; padding: 0.4em 1em; background-color: #292929; font-size: 20px;" href="@vagtplanHref">Vagtplan</a>
     <a> </a>
     <a class="navbar-brand" style="color: #ffffff; border-radius: 1em; padding: 0.4em 1em; background-color: #292929; font-size: 20px;" href="/profil">Min Profil</a>
 </nav>
