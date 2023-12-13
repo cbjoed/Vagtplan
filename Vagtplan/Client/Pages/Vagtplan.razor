@@ -54,7 +54,7 @@ else
             <tbody style="background-color: #FFFFFF">
                 @foreach (var vagter in vagterne)
                 {
-                    <tr>
+                    <tr style="@(vagter.Antal == 0 ? "background-color: red;" : "")">
                         <td>@vagter.Dato</td>
                         <td>@vagter.Lokation</td>
                         <td>@vagter.Rangering</td>
@@ -64,7 +64,14 @@ else
                         <td>@vagter.Start</td>
                         <td>@vagter.Slut</td>
                         <td>
-                            <button @onclick="() => ListVagt(vagter)" style="color:white; background-color: #061C59;">Tag vagt</button>
+                            @if (vagter.Antal == 0)
+                            {
+                                <p>Optaget</p>
+                            }
+                            else
+                            {
+                                <button @onclick="() => ListVagt(vagter)" style="color:white; background-color: #061C59;">Tag vagt</button>
+                            }
                         </td>
                     </tr>
                 }
