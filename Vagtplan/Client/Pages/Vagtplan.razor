@@ -30,6 +30,8 @@
         background-position: center;
     }
 </style>
+
+
 @if (vagterne == null)
 {
     <p><em>Loading...</em></p>
@@ -132,16 +134,53 @@ else
 }
 }
 
+<br />
+<h3>Min Vagter</h3>
+<table class="table">
+    <thead>
+            <tr>
+                <th>Dato</th>
+                <th>Lokation</th>
+                <th>Prioritet</th>
+                <th>Opgave</th>
+                <th>Antal</th>
+                <th>Beskrivlse</th>
+                <th>Start</th>
+                <th>Slut</th>
+            </tr>
+    </thead>
+    <tbody style="background-color: #FFFFFF">
+        @foreach (var MineVagter in MinVagt)
+        {
+            <tr>
+                <td>@MineVagter.Dato</td>
+                <td>@MineVagter.Lokation</td>
+                <td>@MineVagter.Rangering</td>
+                <td>@MineVagter.Type</td>
+                <td>@MineVagter.Antal</td>
+                <td>@MineVagter.Beskrivelse</td>
+                <td>@MineVagter.Start</td>
+                <td>@MineVagter.Slut</td>
+                <td>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
 @code {
     // Initialiser Vagter objekter "vagterne" så de kan læses og printes ud i en liste fra vores database > vagter.
-    // Samt en liste af <Vagter> "valgte" så vi kan gemme objekterne og rykke rundt på dem på vagtplan siden.
     private Vagter[]? vagterne;
+    // Samt en liste af <Vagter> "valgte" så vi kan gemme objekterne og rykke rundt på dem på vagtplan siden.
     private List<Vagter> valgte = new List<Vagter>();
+    private List<Vagter> MinVagt = new List<Vagter>();
     private bool sortAscendingByDato = true;
     private bool sortAscendingByRangering = true;
     private bool sortAscendingByAntal = true;
 
     Vagter vagter = new();
+    Vagter MineVagter = new();
 
     private EditContext aEditContext;
 
@@ -149,6 +188,23 @@ else
     {
         aEditContext = new EditContext(vagter);
         vagterne = await Http.GetFromJsonAsync<Vagter[]>("/api/vagter");
+    }
+
+    public async Task Mine()
+    {
+        storedUsername = await localStore.GetItemAsync<string>("username");
+
+        foreach (var vagt in vagterne)
+        {
+            // Assuming you want to add specific conditions here, e.g., filter by username
+            if (vagt.Username == storedUsername)
+            {
+                MinVagt.Add(vagt);
+
+                // Assuming you want to send the selected data to the server
+                await Http.PostAsJsonAsync<Vagter>("fordeling", vagt);
+            }
+        }
     }
 
     private void ListVagt(Vagter valgtVagt)
@@ -183,21 +239,32 @@ else
             await Http.PostAsJsonAsync<Vagter>("fordeling", valgtVagt);
         }
     }
-    private void SorterDato()
+
+
+
+
+
+
+
+
+
+
+    //Sorter Funktioner
+    private void SorterDato() //Dato
     {
         if (sortAscendingByDato)
         {
-            vagterne = vagterne.OrderBy(Vagter => Vagter.Dato).ToArray();
+            vagterne = vagterne.OrderBy(Vagter => Vagter.Dato).ToArray(); //bestemer hvad det er der skal sorteres.
         }
         else
         {
-            vagterne = vagterne.OrderByDescending(Vagter => Vagter.Dato).ToArray();
+            vagterne = vagterne.OrderByDescending(Vagter => Vagter.Dato).ToArray(); //bestemmer hvad det er der skal sorteres den anden vej/ved 2. klik.
         }
 
-        sortAscendingByDato = !sortAscendingByDato; // Toggle sorting order.
+        sortAscendingByDato = !sortAscendingByDato; // Toggle/gemmer sortering.
     }
 
-    private void SorterPrioritet()
+    private void SorterPrioritet() //Rangering/prioritet
     {
         if (sortAscendingByRangering)
         {
@@ -208,10 +275,10 @@ else
             vagterne = vagterne.OrderByDescending(Vagter => Vagter.Rangering).ToArray();
         }
 
-        sortAscendingByRangering = !sortAscendingByRangering; // Toggle sorting order.
+        sortAscendingByRangering = !sortAscendingByRangering;
     }
 
-    private void SorterAntal()
+    private void SorterAntal()//Antal
     {
         if (sortAscendingByAntal)
         {
@@ -222,6 +289,6 @@ else
             vagterne = vagterne.OrderByDescending(Vagter => Vagter.Antal).ToArray();
         }
 
-        sortAscendingByAntal = !sortAscendingByAntal; // Toggle sorting order.
+        sortAscendingByAntal = !sortAscendingByAntal;
     }
 }
