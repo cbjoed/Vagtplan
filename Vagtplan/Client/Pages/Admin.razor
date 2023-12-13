@@ -102,6 +102,7 @@ else
                 <p>Beskrivelse: <input @bind="valgt.Beskrivelse" /></p>
                 <p>Start: <input @bind="valgt.Start" /></p>
                 <p>Slut: <input @bind="valgt.Slut" /></p>
+                <p>VagtId: <input @bind="valgt.VagtId" /></p>
             @if (isEditing == true)
             {
                 <button @onclick="() => UpdatePlan(valgt)" style="color:white; background-color: #061C59;">Gem</button>
