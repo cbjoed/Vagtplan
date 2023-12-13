@@ -7,6 +7,9 @@
 
 <PageTitle>Vagtplan</PageTitle>
 <style>
+    h5 {
+        color: white
+    }
     h3 {
         color: white;
     }
@@ -33,6 +36,13 @@
 }
 else
 {
+    <div style="text-align: right;">
+    <h5>Sorter Efter</h5>
+            <button @onclick="() => SorterDato()" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Dato</button>
+            <button @onclick="() => SorterPrioritet()" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Prioritet</button>
+            <button @onclick="() => SorterAntal()" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Antal</button>
+    </div>
+
     @if (vagterne.Any()) // Vis kun tabellen, hvis der er nogen vagter tilbage
     {
         <br /><h3>Tilgængelige vagter</h3>
@@ -127,6 +137,9 @@ else
     // Samt en liste af <Vagter> "valgte" så vi kan gemme objekterne og rykke rundt på dem på vagtplan siden.
     private Vagter[]? vagterne;
     private List<Vagter> valgte = new List<Vagter>();
+    private bool sortAscendingByDato = true;
+    private bool sortAscendingByRangering = true;
+    private bool sortAscendingByAntal = true;
 
     Vagter vagter = new();
 
@@ -169,5 +182,46 @@ else
             valgtVagt.Username = storedUsername;
             await Http.PostAsJsonAsync<Vagter>("fordeling", valgtVagt);
         }
+    }
+    private void SorterDato()
+    {
+        if (sortAscendingByDato)
+        {
+            vagterne = vagterne.OrderBy(Vagter => Vagter.Dato).ToArray();
+        }
+        else
+        {
+            vagterne = vagterne.OrderByDescending(Vagter => Vagter.Dato).ToArray();
+        }
+
+        sortAscendingByDato = !sortAscendingByDato; // Toggle sorting order.
+    }
+
+    private void SorterPrioritet()
+    {
+        if (sortAscendingByRangering)
+        {
+            vagterne = vagterne.OrderBy(Vagter => Vagter.Rangering).ToArray();
+        }
+        else
+        {
+            vagterne = vagterne.OrderByDescending(Vagter => Vagter.Rangering).ToArray();
+        }
+
+        sortAscendingByRangering = !sortAscendingByRangering; // Toggle sorting order.
+    }
+
+    private void SorterAntal()
+    {
+        if (sortAscendingByAntal)
+        {
+            vagterne = vagterne.OrderBy(Vagter => Vagter.Antal).ToArray();
+        }
+        else
+        {
+            vagterne = vagterne.OrderByDescending(Vagter => Vagter.Antal).ToArray();
+        }
+
+        sortAscendingByAntal = !sortAscendingByAntal; // Toggle sorting order.
     }
 }

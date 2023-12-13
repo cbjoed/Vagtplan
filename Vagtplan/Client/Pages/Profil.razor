@@ -16,12 +16,17 @@
     private Bruger[]? brugere;
     private Bruger matchingUser;
     private bool isEditing = false; // Flag for at indikere, om redigering er aktiv
+    private string vagtplanHref;
 
     protected override async Task OnInitializedAsync()
     {
         storedUsername = await localStore.GetItemAsync<string>("username");
         brugere = await Http.GetFromJsonAsync<Bruger[]>("/api/bruger");
         matchingUser = brugere.FirstOrDefault(user => user.Username == storedUsername);
+
+
+        vagtplanHref = matchingUser.Type.Trim() == "Frivillig" ? "/Vagtplan" : "/koordinator";
+
     }
 
     private void StartEditing()
@@ -48,6 +53,12 @@
     }
 }
 
+<nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #000000">
+    <a> </a>
+    <a class="navbar-brand" style="color: #ffffff; border-radius: 1em; padding: 0.4em 1em; background-color: #292929; font-size: 20px;" href="@vagtplanHref">Vagtplan</a>
+    <a> </a>
+    <a class="navbar-brand" style="color: #ffffff; border-radius: 1em; padding: 0.4em 1em; background-color: #292929; font-size: 20px;" href="/profil">Min Profil</a>
+</nav>
 
 <br />
 <center><h1>Velkommen, @storedUsername</h1></center>

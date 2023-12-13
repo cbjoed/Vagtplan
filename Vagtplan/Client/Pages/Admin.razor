@@ -6,21 +6,18 @@
 @inject NavigationManager NavigationManager
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 
-<nav class="navbar2 fixed-top navbar-expand-lg navbar-light" style="background-color: #000000; height:40px;">
+<nav class="navbar2 fixed-top navbar-expand-lg navbar-light" style="background-color: #000000; height: 60px; display: flex; align-items: center;">
     <a> </a>
     <a class="navbar-brand" style="color: #ffffff; border-radius: 1em; padding: 0.4em 1em; background-color: #292929; font-size: 20px;" href="/profil">Min Profil</a>
+    <a class="navbar-brand" style="color: #ffffff; border-radius: 1em; padding: 0.4em 1em; background-color: #292929; font-size: 20px;" href="/Koordinator">Vagtplan</a>
 </nav>
 
 <link rel="stylesheet" href="css/UI/Admin.css" />
 <style>
-    div {
+    h5 {
         color: white;
+        text-align: right;
     }
-
-    h3 {
-        color: white;
-    }
-
     th {
         color: white;
     }
@@ -38,6 +35,9 @@
         background-size: cover;
         background-position: center;
     }
+    p {
+        color: white;
+    }
 </style>
 
 @if (vagterne == null)
@@ -46,9 +46,16 @@
 }
 else
 {
-    <br />
-    <h3>Alle vagter</h3>
-    <button @onclick="() => OpretVagt()" style="color:white; background-color: #061C59;">Opret ny vagt</button>
+    <h5>Sorter Efter</h5>
+    <div style="display: flex; justify-content: space-between;">
+        <button @onclick="() => OpretVagt()" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Opret ny vagt</button>
+        <div style="text-align: right;">
+            <button @onclick="() => SorterDato()" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Dato</button>
+            <button @onclick="() => SorterPrioritet()" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Prioritet</button>
+            <button @onclick="() => SorterAntal()" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Antal</button>
+        </div>
+    </div>
+
     <table class="table">
         <thead>
             <tr>
@@ -99,13 +106,14 @@ else
                 <p>Beskrivelse: <input @bind="valgt.Beskrivelse" /></p>
                 <p>Start: <input @bind="valgt.Start" /></p>
                 <p>Slut: <input @bind="valgt.Slut" /></p>
+                <p>VagtId: <input @bind="valgt.VagtId" /></p>
             @if (isEditing == true)
             {
-                <button @onclick="() => UpdatePlan(valgt)" style="color:white; background-color: #061C59;">Gem</button>
+                <button @onclick="() => UpdatePlan(valgt)" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Gem</button>
             }
             else if (isEditing2 == true)
             {
-                <button @onclick="() => CreatePlan(valgt)" style="color:white; background-color: #061C59;">Gem ny vagt</button>
+                <button @onclick="() => CreatePlan(valgt)" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Gem ny vagt</button>
             }
             <button @onclick="CancelEdit">Annuller</button>
         </div>
@@ -117,7 +125,9 @@ else
     // Samt en liste af <Vagter> "valgte" så vi kan gemme objekterne og rykke rundt på dem på vagtplan siden.
     private Vagter[]? vagterne;
     private List<Vagter> valgte = new List<Vagter>();
-
+    private bool sortAscendingByDato = true;
+    private bool sortAscendingByRangering = true;
+    private bool sortAscendingByAntal = true;
 
     private bool isEditing = false;
     private bool isEditing2 = false;
@@ -152,6 +162,7 @@ else
     }
 
     Vagter nyvagt = new();
+    
     private async Task CreatePlan(Vagter nyvagt)
     {
         await Http.PostAsJsonAsync<Vagter>("/api/vagter", nyvagt);
@@ -184,4 +195,45 @@ else
         }
     }
 
+    private void SorterDato()
+    {
+        if (sortAscendingByDato)
+        {
+            vagterne = vagterne.OrderBy(Vagter => Vagter.Dato).ToArray();
+        }
+        else
+        {
+            vagterne = vagterne.OrderByDescending(Vagter => Vagter.Dato).ToArray();
+        }
+
+        sortAscendingByDato = !sortAscendingByDato; // Toggle sorting order.
+    }
+
+    private void SorterPrioritet()
+    {
+        if (sortAscendingByRangering)
+        {
+            vagterne = vagterne.OrderBy(Vagter => Vagter.Rangering).ToArray();
+        }
+        else
+        {
+            vagterne = vagterne.OrderByDescending(Vagter => Vagter.Rangering).ToArray();
+        }
+
+        sortAscendingByRangering = !sortAscendingByRangering; // Toggle sorting order.
+    }
+
+    private void SorterAntal()
+    {
+        if (sortAscendingByAntal)
+        {
+            vagterne = vagterne.OrderBy(Vagter => Vagter.Antal).ToArray();
+        }
+        else
+        {
+            vagterne = vagterne.OrderByDescending(Vagter => Vagter.Antal).ToArray();
+        }
+
+        sortAscendingByAntal = !sortAscendingByAntal; // Toggle sorting order.
+    }
 }
