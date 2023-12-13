@@ -192,19 +192,7 @@ else
 
     public async Task Mine()
     {
-        storedUsername = await localStore.GetItemAsync<string>("username");
-
-        foreach (var vagt in vagterne)
-        {
-            // Assuming you want to add specific conditions here, e.g., filter by username
-            if (vagt.Username == storedUsername)
-            {
-                MinVagt.Add(vagt);
-
-                // Assuming you want to send the selected data to the server
-                await Http.PostAsJsonAsync<Vagter>("fordeling", vagt);
-            }
-        }
+        MinVagt = await Http.GetFromJsonAsync<List<Vagter>>("fordeling");
     }
 
     private void ListVagt(Vagter valgtVagt)
