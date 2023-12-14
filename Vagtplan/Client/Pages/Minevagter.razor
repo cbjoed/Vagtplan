@@ -1,0 +1,124 @@
+﻿@page "/minevagter"
+@using Musikfestival.Shared.Models
+@using MongoDB.Bson
+@using MongoDB.Driver
+@inject HttpClient Http;
+@inject Blazored.LocalStorage.ILocalStorageService localStore
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+
+<PageTitle>Vagtplan</PageTitle>
+<style>
+
+    div{
+        color: white
+    }
+    h5 {
+        color: white;
+    }
+
+    h3 {
+        color: white;
+    }
+
+    th {
+        color: white;
+    }
+
+    td {
+        color: #000000;
+    }
+
+    body {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        background-image: url('Billeder/baggrund_fade.png');
+        background-size: cover;
+        background-position: center;
+    }
+</style>
+
+
+@if (minevagter == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-6">
+            <button @onclick="NavigateToMineVagter" type="button" class="btn btn-primary" style="color:white; background-color: #061C59;">Vagtplan</button>
+    </div></div>
+
+        <br /><h3>Mine vagter</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <!-- Header cells for den øverste liste -->
+                    <th>Dato</th>
+                    <th>Lokation</th>
+                    <th>Opgave</th>
+                    <th>Beskrivlse</th>
+                    <th>Start</th>
+                    <th>Slut</th>
+                    <th>Hvem</th>
+                </tr>
+            </thead>
+            <tbody style="background-color: #FFFFFF">
+                @foreach (var vagter in minevagter)
+                {
+                    <tr>
+                        <td>@vagter.Dato</td>
+                        <td>@vagter.Lokation</td>
+                        <td>@vagter.Type</td>
+                        <td>@vagter.Beskrivelse</td>
+                        <td>@vagter.Start</td>
+                        <td>@vagter.Slut</td>
+                        <td>@vagter.Username</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+
+@code {
+    // Initialiser Vagter objekter "vagterne" så de kan læses og printes ud i en liste fra vores database > vagter.
+    private Vagter[]? minevagter;
+    private bool sortAscendingByDato = true;
+    private bool sortAscendingByRangering = true;
+    private bool sortAscendingByAntal = true;
+
+    Vagter vagter = new();
+
+    private EditContext aEditContext;
+
+    protected override async Task OnInitializedAsync()
+    {
+        aEditContext = new EditContext(vagter);
+        minevagter = await Http.GetFromJsonAsync<Vagter[]>("fordeling");
+    }
+
+
+    //Sorter Funktioner
+    private void SorterDato() //Dato
+    {
+        if (sortAscendingByDato)
+        {
+            minevagter = minevagter.OrderBy(Vagter => Vagter.Dato).ToArray(); //bestemer hvad det er der skal sorteres.
+        }
+        else
+        {
+            minevagter = minevagter.OrderByDescending(Vagter => Vagter.Dato).ToArray(); //bestemmer hvad det er der skal sorteres den anden vej/ved 2. klik.
+        }
+
+        sortAscendingByDato = !sortAscendingByDato; // Toggle/gemmer sortering.
+    }
+
+    public void NavigateToMineVagter()
+    {
+        NavigationManager.NavigateTo("/vagtplan");
+    }
+}

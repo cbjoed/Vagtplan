@@ -7,8 +7,9 @@ namespace Musikfestival.Repositories
 
     public interface IVagter
     {
-        public MineVagter[] GetAllMineVagter();
         public Vagter[] GetAllVagter();
+
+        public MineVagter[] GetMineVagter();
         public void UpdatePlan(Vagter vagter);
         public void CreatePlan(Vagter nyvagt);
         void AddVagt(Vagter vagter);
