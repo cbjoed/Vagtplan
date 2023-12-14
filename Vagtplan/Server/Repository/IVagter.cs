@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 namespace Musikfestival.Repositories
 {
 
-
     public interface IVagter
     {
+        public MineVagter[] GetAllMineVagter();
         public Vagter[] GetAllVagter();
         public void UpdatePlan(Vagter vagter);
         public void CreatePlan(Vagter nyvagt);

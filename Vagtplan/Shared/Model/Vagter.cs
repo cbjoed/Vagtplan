@@ -22,6 +22,13 @@ namespace Musikfestival.Shared.Models
 
         [JsonIgnore] public bool IsEditing { get; set;}
     }
+    public class MineVagter
+    {
+        [BsonId]
+        [BsonRepresentationAttribute(BsonType.ObjectId)]
+        public int VagtId { get; set; }
+        public string Username { get; set; } = String.Empty;
+    }
 }
 
 

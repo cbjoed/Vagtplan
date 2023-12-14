@@ -90,7 +90,7 @@ namespace Musikfestival.Repositories
         }
 
 
-        public void CreatePlan (Vagter nyvagt)
+        public void CreatePlan(Vagter nyvagt)
         {
             BsonDocument vagterDocument = new BsonDocument
             {
@@ -160,6 +160,64 @@ namespace Musikfestival.Repositories
             }
 
             return vagtere.ToArray();
+        }
+
+
+
+
+        //JEG GIDER IKKE MERE
+        //DET DUR IKKE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        public MineVagter[] GetAllMineVagter()
+        {
+            var result = fordeling.Find(new BsonDocument()).ToList();
+
+            List<MineVagter> MinVagt = new List<MineVagter>();
+
+            foreach (var doc in result)
+            {
+                MineVagter Min = new MineVagter()
+                {
+                    VagtId = doc.Contains("vagtId") ? doc["vagtId"].AsInt32 : 0,
+                    Username = doc.Contains("username") && doc["username"] != BsonNull.Value ? doc["username"].AsString : null,
+                };
+                MinVagt.Add(Min);
+
+            }
+            return MinVagt.ToArray();
+        }
+        public void AddVagterFraFordeling(MineVagter min)
+        {
+
+            var existingVagtIdInFordeling = fordeling.Find(Builders<BsonDocument>.Filter.And(
+                Builders<BsonDocument>.Filter.Eq("vagtId", min.VagtId),
+                Builders<BsonDocument>.Filter.Eq("username", min.Username)
+            )).FirstOrDefault();
+
+            if (existingVagtIdInFordeling != null)
+            {
+                Vagter[] GetAllVagter()
+                {
+                    var result = vagterKollektion.Find(new BsonDocument()).ToList();
+
+                    List<Vagter> MinVagt = new List<Vagter>();
+
+                    foreach (var doc in result)
+                    {
+                        Vagter dine = new Vagter()
+                        {
+                            Dato = doc.Contains("dato") && doc["dato"] != BsonNull.Value ? doc["dato"].AsString : null,
+                            Lokation = doc.Contains("lokation") && doc["lokation"] != BsonNull.Value ? doc["lokation"].AsString : null,
+                            Rangering = doc.Contains("rangering") && doc["rangering"] != BsonNull.Value ? doc["rangering"].AsInt32 : 0,
+                            Type = doc.Contains("type") && doc["type"] != BsonNull.Value ? doc["type"].AsString : null,
+                            Start = doc.Contains("start") && doc["start"] != BsonNull.Value ? doc["start"].AsString : null,
+                            Slut = doc.Contains("slut") && doc["slut"] != BsonNull.Value ? doc["slut"].AsString : null,
+                            Beskrivelse = doc.Contains("beskrivelse") && doc["beskrivelse"] != BsonNull.Value ? doc["beskrivelse"].AsString : null,
+                        };
+                        MinVagt.Add(dine);
+                    }
+                    return MinVagt.ToArray();
+                }
+            }
         }
     }
 }
