@@ -61,7 +61,13 @@ namespace Musikfestival.Repositories
     {
         { "vagtId", vagter.VagtId },
         { "username", vagter.Username },
-    };
+        { "dato", vagter.Dato },
+        { "lokation", vagter.Lokation },
+        { "type", vagter.Type },
+        { "start", vagter.Start },
+        { "slut", vagter.Slut },
+        { "beskrivelse", vagter.Beskrivelse },
+        };
 
             // Opdater antal i "vagterKollektion"
             var filter = Builders<BsonDocument>.Filter.Eq("vagtId", vagter.VagtId);
