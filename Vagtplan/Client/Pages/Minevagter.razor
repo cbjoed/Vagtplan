@@ -67,18 +67,19 @@ else
                 </tr>
             </thead>
             <tbody style="background-color: #FFFFFF">
-                @foreach (var vagter in minevagter)
-                {
-                    <tr>
-                        <td>@vagter.Dato</td>
-                        <td>@vagter.Lokation</td>
-                        <td>@vagter.Type</td>
-                        <td>@vagter.Beskrivelse</td>
-                        <td>@vagter.Start</td>
-                        <td>@vagter.Slut</td>
-                        <td>@vagter.Username</td>
-                    </tr>
-                }
+            @foreach (var vagter in minevagter.Where(v => v.Username == storedUsername))
+            {
+                <tr>
+                    <td>@vagter.Dato</td>
+                    <td>@vagter.Lokation</td>
+                    <td>@vagter.Type</td>
+                    <td>@vagter.Beskrivelse</td>
+                    <td>@vagter.Start</td>
+                    <td>@vagter.Slut</td>
+                    <td>@vagter.Username</td>
+                </tr>
+            }
+
             </tbody>
         </table>
     }
@@ -95,10 +96,13 @@ else
 
     private EditContext aEditContext;
 
+    private string storedUsername;
+
     protected override async Task OnInitializedAsync()
     {
         aEditContext = new EditContext(vagter);
         minevagter = await Http.GetFromJsonAsync<Vagter[]>("fordeling");
+        storedUsername = await localStore.GetItemAsync<string>("username"); // replace "username" with your actual key
     }
 
 
@@ -121,4 +125,5 @@ else
     {
         NavigationManager.NavigateTo("/vagtplan");
     }
+
 }
