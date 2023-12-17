@@ -7,12 +7,12 @@ namespace Musikfestival.Repositories
 
     public interface IVagter
     {
-        public Vagter[] GetAllVagter();
+        public Vagter[] GetAllVagter(); //Bruger læser alle vagter
 
-        public MineVagter[] GetMineVagter();
-        public void UpdatePlan(Vagter vagter);
-        public void CreatePlan(Vagter nyvagt);
-        void AddVagt(Vagter vagter);
-        Task DeleteVagt(int vagtId);
+        public MineVagter[] GetMineVagter(); //Bruger læser sine egne vagter
+        public void UpdatePlan(Vagter vagter); //Koordinator opdaterer en vagt
+        public void CreatePlan(Vagter nyvagt); //Koordinator oprette en ny vagt
+        void TakeVagt(Vagter vagter); //Bruger tager en vagt
+        Task DeleteVagt(int vagtId); //Koordinator sletter en vagt
     }
 }

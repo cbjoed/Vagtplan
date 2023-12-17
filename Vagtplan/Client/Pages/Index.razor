@@ -30,40 +30,40 @@
 </main>
 
 @code {
-    private Bruger bruger = new Bruger();
+    private Bruger bruger = new Bruger(); // Vi opretter en instans af Bruger kaldet bruger, som vi kan bruge som skabelon til at manipulere data.
 
-    private async Task AttemptLogin()
+    private async Task AttemptLogin() // Forbundet til vores Log ind formular, asyknkron Task.. Vi går igennem nogle awaits som skal gennemføres før metodekaldet fører os videre.
     {
         try
         {
             // Communicate with the server API
-            var response = await Http.PostAsJsonAsync<Bruger>("/api/bruger", bruger);
-            response.EnsureSuccessStatusCode();
+            var response = await Http.PostAsJsonAsync<Bruger>("/api/bruger", bruger); // Vi sender en Post forespørgsel og får et tilbagesvar fra API om dataen stemmer overens
+            response.EnsureSuccessStatusCode(); // Bruges til at kaste en undtagelse hvis udførelsen slår fejl.
 
-            Bruger authenticatedUser = await response.Content.ReadFromJsonAsync<Bruger>();
+            Bruger authenticatedUser = await response.Content.ReadFromJsonAsync<Bruger>(); //Venter på svar om dataen er korrekt og matcher med et valid username & password
 
-            if (authenticatedUser != null)
+            if (authenticatedUser != null) // Hvis authenticatedUser ikke er null og derfor er godkendt udføres if statement
             {
-                await localStore.SetItemAsync("username", authenticatedUser.Username);
-                await localStore.SetItemAsync("type", authenticatedUser.Type);
-                if (authenticatedUser.Type == "Koordinator")
+                await localStore.SetItemAsync("username", authenticatedUser.Username); //Vi gemmer username lokalt til senere brug
+                await localStore.SetItemAsync("type", authenticatedUser.Type);//Ligeledes med personens type (frivillig eller koordinator)
+                if (authenticatedUser.Type == "Koordinator") //Hvis brugeren er koordinator dirigeres vedkommende til koordinatorsiden
                 {
-                    NavigationManager.NavigateTo("/koordinator");
+                    NavigationManager.NavigateTo("/koordinator"); // Dirigering til koordinatorsiden hvis type stemmer overens
                 }
                 else
                 {
-                    NavigationManager.NavigateTo("/vagtplan");
+                    NavigationManager.NavigateTo("/vagtplan"); //Og ellers ryger den frivillige til vagtplansiden
                 }
             }
             else
             {
-                // Handle unsuccessful login, show error message, etc.
+                // Konsollen udskriver en fejl hvis ikke ens credentials er valide. Dette kan gøres til en meddelelse på selve siden.
                 Console.WriteLine("Login failed. Please check your credentials.");
             }
         }
         catch (Exception ex)
         {
-            // Log or handle any exceptions that occur during the request
+            // Kan bruges til at fortælle os hvad der gik galt så fremt udførelsen slog fejl.
             Console.WriteLine($"Error: {ex.Message}");
         }
     }

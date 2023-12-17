@@ -40,10 +40,14 @@
     }
 </style>
 
+<nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #000000;">
+    <a class="navbar-brand" style="margin-left: 20px; color: #ffffff; border-radius: 0.8em; padding: 0.3em 1em; background-color: #292929; font-size: 17px;" href="/vagtplan">Vagtplan</a>
+    <a class="navbar-brand" style="color: #ffffff; border-radius: 0.8em; padding: 0.3em 1em; background-color: #292929; font-size: 17px;" href="/profil">Min Profil</a>
+</nav>
 
 @if (minevagter == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>Vent venligst...</em></p>
 }
 else
 {
@@ -63,11 +67,12 @@ else
                     <th>Beskrivlse</th>
                     <th>Start</th>
                     <th>Slut</th>
-                    <th>Hvem</th>
                 </tr>
             </thead>
             <tbody style="background-color: #FFFFFF">
-            @foreach (var vagter in minevagter.Where(v => v.Username == storedUsername))
+            @foreach (var vagter in minevagter.Where(v => v.Username == storedUsername)) // En extension .Where som udføres med parametrene v => v.Username == storedUsername))
+            //Dette er et lambdaudtryk for at kun hvis egenskaben Username fra vores modeklassen stemmer overens med storedUsername (localstore) så vises da de særskilte vagter. Herved kan man
+            // som bruger se kun de vagter som er oprettet i ens eget navn/brugernavn.
             {
                 <tr>
                     <td>@vagter.Dato</td>
@@ -76,7 +81,6 @@ else
                     <td>@vagter.Beskrivelse</td>
                     <td>@vagter.Start</td>
                     <td>@vagter.Slut</td>
-                    <td>@vagter.Username</td>
                 </tr>
             }
 
@@ -87,43 +91,22 @@ else
 
 @code {
     // Initialiser Vagter objekter "vagterne" så de kan læses og printes ud i en liste fra vores database > vagter.
-    private Vagter[]? minevagter;
-    private bool sortAscendingByDato = true;
-    private bool sortAscendingByRangering = true;
-    private bool sortAscendingByAntal = true;
+    private Vagter[]? minevagter; // Vi opretter en instans af array fra modelklassen Vagter, kalder den for minevagter og bruger denne i vores table.
 
-    Vagter vagter = new();
+    Vagter vagter = new(); // Vi opretter en instans af et array fra 
 
-    private EditContext aEditContext;
+    private string storedUsername; // Vi opretter en string variabel storedUsername så denne kan bruges til at gemme data.
 
-    private string storedUsername;
-
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync() // Dette er et API kald der udløses når brugeren besøger siden
     {
-        aEditContext = new EditContext(vagter);
-        minevagter = await Http.GetFromJsonAsync<Vagter[]>("fordeling");
-        storedUsername = await localStore.GetItemAsync<string>("username"); // replace "username" with your actual key
+        minevagter = await Http.GetFromJsonAsync<Vagter[]>("fordeling"); // Den gemmer information fra vores kollektion "fordeling" i objektet minevagter som vi gør brug af i vores html til at vise
+        // de vagter der stemmer overens med ens brugernavn
+        storedUsername = await localStore.GetItemAsync<string>("username"); // Her hentes username fra vores localstore (gemt i localstore ved login) og den gemmes her i variablen storedUsername.
     }
 
-
-    //Sorter Funktioner
-    private void SorterDato() //Dato
+    public void NavigateToMineVagter() // Ved klik på "Vagtplan" knappen udløses denne NavigateTo metode som er en Asp.Core komponent vi har injected, metoden bruges til nemt at navigere rundt på webapplikationen.
     {
-        if (sortAscendingByDato)
-        {
-            minevagter = minevagter.OrderBy(Vagter => Vagter.Dato).ToArray(); //bestemer hvad det er der skal sorteres.
-        }
-        else
-        {
-            minevagter = minevagter.OrderByDescending(Vagter => Vagter.Dato).ToArray(); //bestemmer hvad det er der skal sorteres den anden vej/ved 2. klik.
-        }
-
-        sortAscendingByDato = !sortAscendingByDato; // Toggle/gemmer sortering.
-    }
-
-    public void NavigateToMineVagter()
-    {
-        NavigationManager.NavigateTo("/vagtplan");
+        NavigationManager.NavigateTo("/vagtplan"); // Linket /vagtplan fører til vores vagtplan side.
     }
 
 }

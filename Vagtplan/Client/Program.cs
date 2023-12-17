@@ -15,7 +15,7 @@ namespace Vagtplan.Client
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddBlazoredLocalStorage();
+            builder.Services.AddBlazoredLocalStorage(); // Vi gør brug af LocalStorage
             builder.Services.AddBlazoredModal();
 
             await builder.Build().RunAsync();

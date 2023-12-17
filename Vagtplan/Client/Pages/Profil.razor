@@ -3,6 +3,7 @@
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 @inject Blazored.LocalStorage.ILocalStorageService localStore
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 <PageTitle>Profilside</PageTitle>
 <style>
@@ -12,71 +13,73 @@
     </style>
 
 @code {
-    private string storedUsername;
-    private Bruger[]? brugere;
-    private Bruger matchingUser;
-    private bool isEditing = false; // Flag for at indikere, om redigering er aktiv
-    private string vagtplanHref;
+    private string storedUsername; // Vi har en variabel string storedUsername, så vi kan gemme noget i denne senere.
+    private Bruger[]? brugere; // Vi laver en instans af Bruger - brugere.
+    private Bruger matchingUser; // Ligeledes med matchingUser
+    private bool EnableEdit = false; // Flag for at indikere, om redigering er aktiv
+    private string vagtplanHref; // Vi opretter en string vagtplanHref da denne skal bruges senere.
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync() // Her trækker vi information fra vores brugerkollektion
     {
-        storedUsername = await localStore.GetItemAsync<string>("username");
-        brugere = await Http.GetFromJsonAsync<Bruger[]>("/api/bruger");
-        matchingUser = brugere.FirstOrDefault(user => user.Username == storedUsername);
+        storedUsername = await localStore.GetItemAsync<string>("username"); // Vi gemmer vores localstore username i variablen "storedUsername" så vi kan bruge dette på siden til at filtrere 
+        brugere = await Http.GetFromJsonAsync<Bruger[]>("/api/bruger"); // Vi henter information om brugere fra vores API kollektion "bruger" og gemmer disse i variablen "brugere"
+        matchingUser = brugere.FirstOrDefault(user => user.Username == storedUsername); // Her filtrerer vi at hvad der vises stemmer overens med storedUsername og derved username fra vores modelklasse.. 
+        // FirstOrDefault er en LINQ metode der returnere det første element i samlingen der opfylder den specificerede betingelse. Parametrene er et lambda udtryk der siger at:
+        // Det ønskede element skal have Username egenskaben værende lig med storedUsername
 
 
-        vagtplanHref = matchingUser.Type.Trim() == "Frivillig" ? "/Vagtplan" : "/koordinator";
+        vagtplanHref = matchingUser.Type.Trim() == "Frivillig" ? "/vagtplan" : "/koordinator"; // Variablen vagtplanHref bruges til at dirigere brugeren hen til hvad der stemmer overens med deres tilladelser (frilliv, koordinator)
 
     }
 
-    private void StartEditing()
+    private void StartEditing() // Hvis denne metode bliver kaldt udløser det at vores boolean EnableEdit bliver true, og derved kan vi ved hjælp af if statements i vores div, hvis den bliver true - 
+    // binde vores objekt af Bruger til matchinUser elementerne som er sat til at ændre det dokument som stemmer overens med vores  localstore storedUsername 
     {
-        isEditing = true;
+        EnableEdit = true; // Boolean udløses, true.
 
     }
 
-    private async Task SaveChanges()
+    public void Logout() // Funktion som fører brugeren tilbage til login side
     {
-        var response = await Http.PutAsJsonAsync("/api/bruger", matchingUser);
-        // Gem ændringer, f.eks. ved at sende dem til serveren
+        NavigationManager.NavigateTo("/"); // Ved udførelsen af denne metode ryger bruger tilbage til index siden som er hvor man logger ind.
+    }
 
-        if (response.IsSuccessStatusCode)
+    private async Task SaveChanges() // Ved tryk på Gem Ændringer kan vi nu gemme de forbundne data som stemmer overens med vores objekt matchingUser 
+    {
+        var response = await Http.PutAsJsonAsync("/api/bruger", matchingUser); // Response variablen bruges her til at fortælle os om handlingen blev korrekt udført, i så fald vil vores 
+        //boolean EnableEdit skifte tilbage til false
+
+        if (response.IsSuccessStatusCode) // Hvis response var en success
         {
-            Console.WriteLine("Changes saved successfully.");
-            isEditing = false;
+            Console.WriteLine("Changes saved successfully."); // Kan det ses i konsollen
+            EnableEdit = false; // Og vores boolean skifter værdi
         }
-        else
+        else // ellers
         {
-            Console.WriteLine("Failed to save changes.");
+            Console.WriteLine("Failed to save changes."); // Eventuelt kan her kobles en fejlmeddelelese på for at underrette brugeren om fejl.
             // Handle the failure, e.g., show an error message
         }
     }
 }
 
-<nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #000000">
-    <a> </a>
-    <a class="navbar-brand" style="color: #ffffff; border-radius: 1em; padding: 0.4em 1em; background-color: #292929; font-size: 20px;" href="@vagtplanHref">Vagtplan</a>
-    <a> </a>
-    <a class="navbar-brand" style="color: #ffffff; border-radius: 1em; padding: 0.4em 1em; background-color: #292929; font-size: 20px;" href="/profil">Min Profil</a>
+<nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #000000;">
+    <a class="navbar-brand" style="margin-left: 20px; color: #ffffff; border-radius: 0.8em; padding: 0.3em 1em; background-color: #292929; font-size: 17px;" href="@vagtplanHref">Vagtplan</a>
+    <a class="navbar-brand" style="color: #ffffff; border-radius: 0.8em; padding: 0.3em 1em; background-color: #292929; font-size: 17px;" href="/profil">Min Profil</a>
 </nav>
 
 <br />
-<center><h1>Velkommen, @storedUsername</h1></center>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/UI/Profil.css" />
-    <title>Container Box</title>
 </head>
 
-<body>
+<body1>
     @if (matchingUser != null)
     {
         <br />
         <div class="container-box">
             <h3>Kontaktoplysninger
-                @if (isEditing)
+                @if (EnableEdit)
                 {
                     <button @onclick="SaveChanges" style="font-size: 15px;color:white; background-color: #061C59;">Gem ændringer</button>
                 }
@@ -85,7 +88,7 @@
                     <img src="Billeder/Update.png" alt="Button Image" class="UpdateButton" style="width: 28px; height: 35px;" @onclick="StartEditing" />
                 }
             </h3>
-            @if (isEditing)
+            @if (EnableEdit)
             {
                 <p><b>Navn:</b> <input @bind="matchingUser.Navn" /></p>
                 <p><b>Email:</b> <input @bind="matchingUser.Email" /></p>
@@ -101,15 +104,15 @@
             }
         </div>
     }
-</body>
+</body1>
 
-<body>
+<body2>
     @if (matchingUser != null)
     {
         <br />
         <div class="container-box">
             <h3>Biografi</h3>
-            @if (isEditing)
+            @if (EnableEdit)
             {
                 <p><b>@matchingUser.Type</b></p>
                 <p><b>Om mig:</b> <input @bind="matchingUser.Beskrivelse" /></p>
@@ -122,4 +125,5 @@
         </div>
     }
     <br />
-</body>
+</body2>
+    <center><button @onclick="Logout" type="button" class="btn btn-primary" style="color:white; background-color: #061C59;">Log ud</button></center>

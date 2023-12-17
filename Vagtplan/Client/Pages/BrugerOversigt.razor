@@ -1,0 +1,116 @@
+﻿@page "/oversigt"
+@using Musikfestival.Shared.Models
+@using MongoDB.Bson
+@using MongoDB.Driver
+@inject HttpClient Http;
+@inject Blazored.LocalStorage.ILocalStorageService localStore
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+
+<PageTitle>Vagt oversigt</PageTitle>
+<style>
+
+    div {
+        color: white
+    }
+
+    h5 {
+        color: white;
+    }
+
+    h3 {
+        color: white;
+    }
+
+    th {
+        color: white;
+    }
+
+    td {
+        color: #000000;
+    }
+
+    body {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        background-image: url('Billeder/baggrund_fade.png');
+        background-size: cover;
+        background-position: center;
+    }
+</style>
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #000000;">
+    <a class="navbar-brand" style="margin-left: 20px; color: #ffffff; border-radius: 0.8em; padding: 0.3em 1em; background-color: #292929; font-size: 17px;" href="/vagtplan">Vagtplan</a>
+    <a class="navbar-brand" style="color: #ffffff; border-radius: 0.8em; padding: 0.3em 1em; background-color: #292929; font-size: 17px;" href="/profil">Min Profil</a>
+</nav>
+
+@if (oversigt == null)
+{
+    <p><em>Vent venligst...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-6">
+            <button @onclick="NavigateToKoordinatorsiden" type="button" class="btn btn-primary" style="color:white; background-color: #061C59;">Tilbage</button>
+        </div>
+    </div>
+
+    <br />
+    <h3>Bruger oversigt</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <!-- Header cells for den øverste liste -->
+                <th>Dato</th>
+                <th>Lokation</th>
+                <th>Opgave</th>
+                <th>Beskrivlse</th>
+                <th>Start</th>
+                <th>Slut</th>
+                <th>Hvem</th>
+            </tr>
+        </thead>
+        <tbody style="background-color: #FFFFFF">
+            @foreach (var vagter in oversigt)
+            {
+                <tr>
+                    <td>@vagter.Dato</td>
+                    <td>@vagter.Lokation</td>
+                    <td>@vagter.Type</td>
+                    <td>@vagter.Beskrivelse</td>
+                    <td>@vagter.Start</td>
+                    <td>@vagter.Slut</td>
+                    <td>@vagter.Username</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+
+
+@code {
+    // Initialiser Vagter objekter "vagterne" så de kan læses og printes ud i en liste fra vores database > vagter.
+    private Vagter[]? oversigt;
+    private bool sortAscendingByDato = true;
+    private bool sortAscendingByRangering = true;
+    private bool sortAscendingByAntal = true;
+
+    Vagter vagter = new(); // Vi laver en instans af Vagter, kaldet vagter.
+
+    protected override async Task OnInitializedAsync() // Denne initieres når siden tilgås
+    {
+        oversigt = await Http.GetFromJsonAsync<Vagter[]>("fordeling"); // Og den gemmer her information fra vores "fordeling" kollektion i variablen oversigt som bruges i vores html, til at
+        // vise et array med de vagter der er blevet fordelt og deres respektive brugernavne.
+    }
+
+    public void NavigateToKoordinatorsiden() // Funktion til at navigere brugeren til siden /koordinator.. 
+    {
+        NavigationManager.NavigateTo("/koordinator"); // Denne metode er en Asp.Core komponent, den benyttes ved at injecte @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+        // og den fører os hen til /koordinator, som er vores koordintorside.
+    }
+
+}

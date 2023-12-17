@@ -10,8 +10,8 @@ namespace Musikfestival.Repositories
     {
         //public void Update(Bruger bruger);
 
-        public Bruger[] GetAllBrugere();
-        Task<Bruger> AuthenticateUserAsync(string username, string password);
-        public void Update(Bruger bruger);
+        public Bruger[] GetAllBrugere(); // Læs alle brugere
+        Task<Bruger> AuthenticateUserAsync(string username, string password); // Godkend credentials
+        public void Update(Bruger bruger); // Opdater Bruger med argumentet bruger
     }
 }

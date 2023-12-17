@@ -1,0 +1,35 @@
+﻿.div {
+    color: white;
+}
+
+.h5 {
+    color: white;
+}
+
+.h3 {
+    color: white;
+}
+
+.h4 {
+    color: white;
+    font-size: 20px
+}
+
+.th {
+    color: white;
+}
+
+.td {
+    color: #000000;
+}
+
+.body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    background-image: url('Billeder/baggrund_fade.png');
+    background-size: cover;
+    background-position: center;
+}
