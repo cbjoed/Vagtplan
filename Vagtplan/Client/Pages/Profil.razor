@@ -44,12 +44,6 @@
         EnableEdit = true; // Boolean udløses, true.
 
     }
-
-    public void Logout() // Funktion som fører brugeren tilbage til login side
-    {
-        NavigationManager.NavigateTo("/"); // Ved udførelsen af denne metode ryger bruger tilbage til index siden som er hvor man logger ind.
-    }
-
     private async Task SaveChanges() // Ved tryk på Gem Ændringer kan vi nu gemme de forbundne data som stemmer overens med vores objekt matchingUser 
     {
         var response = await Http.PutAsJsonAsync("/api/bruger", matchingUser); // Response variablen bruges her til at fortælle os om handlingen blev korrekt udført, i så fald vil vores 
@@ -71,6 +65,7 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #000000;">
     <a class="navbar-brand" style="margin-left: 20px; color: #ffffff; border-radius: 0.8em; padding: 0.3em 1em; background-color: #292929; font-size: 17px;" href="@vagtplanHref">Vagtplan</a>
     <a class="navbar-brand" style="color: #ffffff; border-radius: 0.8em; padding: 0.3em 1em; background-color: #292929; font-size: 17px;" href="/profil">Min Profil</a>
+    <a class="navbar-brand" style=" margin-left: auto; color: #ffffff; border-radius: 0.8em; padding: 0.3em 1em; background-color: #292929; font-size: 17px;" href="/">Log Ud</a>
 </nav>
 
 <br />
@@ -132,4 +127,3 @@
     }
     <br />
 </body2>
-<center><button @onclick="Logout" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Log ud</button></center>
