@@ -57,7 +57,7 @@ else
     </div>
     <div class="row">
         <div class="col-6">
-            <button @onclick="NavigateToMineVagter" type="button" class="btn btn-primary" style="color:white; background-color: #061C59;">Mine vagter</button>
+            <button @onclick="NavigateToMineVagter" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Mine vagter</button>
         </div>
         <div class="col-6" style="text-align: right;">
             <button @onclick="() => SorterDato()" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Dato</button>
@@ -105,7 +105,7 @@ else
                             }
                             else
                             {
-                                <button @onclick="() => ListVagt(vagter)" style="color:white; background-color: #061C59;">Tag vagt</button>
+                                <button @onclick="() => ListVagt(vagter)" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Tag vagt</button>
                             }
                         </td>
                     </tr>
@@ -154,7 +154,7 @@ else
     </table>
     @if (valgte.Any()){ // Når man trykker på "Tag Vagt" bliver ListVagt(Vagter valgtVagt) initieret og vores foreach (var valgtVagt in valgte) åbnes - 
         // her siger vores if statement at hvis der er nogle "valgte" objekter, bliver der lavet en ny array liste og herunder popper "Godkend min vagtplan" op.
-        <button @onclick="TakeVagt" style="color:white; background-color: #061C59;">Godkend din vagtplan</button>
+        <button @onclick="TakeVagt" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Godkend din vagtplan</button>
 }
 }
 

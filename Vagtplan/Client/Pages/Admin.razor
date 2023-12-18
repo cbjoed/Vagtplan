@@ -139,13 +139,13 @@ else
         // Knapperne er forbundet til hver deres metode for RESTful requests.
         @if (OpenUpdate == true)
         {
-            <button @onclick="() => UpdatePlan(valgt)" style="color:white; background-color: #061C59;">Gem</button>
+            <button @onclick="() => UpdatePlan(valgt)" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Gem</button>
             }
             else if (OpenCreate == true)
             {
-            <button @onclick="() => CreatePlan(valgt)" style="color:white; background-color: #061C59;">Opret ny vagt</button>
+            <button @onclick="() => CreatePlan(valgt)" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59;">Opret ny vagt</button>
             }
-        <button @onclick="CancelEdit" style="color:black; background-color: white; margin-left: 4px;">Annuller</button>
+        <button @onclick="CancelEdit" type="submit" class="btn btn-primary" style="color:white; background-color: #061C59; margin-left: 4px;">Annuller</button>
     }
 }
 
